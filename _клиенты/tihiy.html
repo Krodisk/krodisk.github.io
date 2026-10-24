@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тихий ход</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sofia+Sans+Extra+Condensed:wght@700;800&family=Sofia+Sans:wght@400;600&display=swap" rel="stylesheet">
+<script>if (location.search.includes('m')) document.documentElement.classList.add('m')</script>
+<style>
+  /* Северное озеро: фото воды на весь экран, узкий высокий шрифт как надписи на причале, оранжевый спасжилет как единственный яркий цвет */
+  :root {
+    --lake: #13272a;
+    --pine: #1f3b35;
+    --birch: #f1efe8;
+    --stone: #c9cec6;
+    --vest: #ff6b1f;
+    --ink: #10191a;
+    --muted: #61706c;
+    --cond: "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif;
+    --text: "Sofia Sans", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html.m body { width: 390px; }
+  body { background: var(--birch); color: var(--ink); font: 400 17px/1.5 var(--text); }
+  img { display: block; max-width: 100%; }
+  .page { container-type: inline-size; }
+  .in { max-width: 1320px; margin: 0 auto; padding-inline: 40px; }
+
+  .hero { position: relative; height: 860px; color: #fff; overflow: hidden; }
+  .hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,22,24,.55) 0%, rgba(10,22,24,0) 30%, rgba(10,22,24,0) 50%, rgba(10,22,24,.75) 100%); }
+  .hero .in { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+  .head { display: flex; align-items: center; gap: 30px; padding-block: 26px; font-weight: 600; }
+  .logo { font: 800 34px/1 var(--cond); letter-spacing: .01em; }
+  .head nav { display: flex; gap: 26px; margin-left: auto; opacity: .9; }
+  .head .tel { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); border-radius: 40px; padding: 8px 16px; }
+  .hero h1 { margin-top: auto; font: 800 200px/.9 var(--cond); letter-spacing: -.01em; text-transform: uppercase; }
+  .hero .row { display: flex; justify-content: space-between; align-items: end; gap: 40px; padding: 26px 0 40px; }
+  .hero .row p { font-size: 21px; max-width: 34ch; }
+  .vestbtn { background: var(--vest); color: #1a0d05; border: 0; border-radius: 60px; padding: 20px 32px; font: 600 18px var(--text); white-space: nowrap; }
+
+  .avail { padding-block: 80px; }
+  .avail .top { display: flex; justify-content: space-between; align-items: end; gap: 40px; margin-bottom: 30px; }
+  .avail h2, .routes h2 { font: 800 72px/.9 var(--cond); text-transform: uppercase; color: var(--pine); }
+  .avail .top p { color: var(--muted); max-width: 40ch; }
+  .legend { display: flex; gap: 20px; font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .cal .dow { font-size: 14px; color: var(--muted); padding: 0 4px; }
+  .day { background: #fff; border-radius: 12px; padding: 12px; min-height: 92px; display: flex; flex-direction: column; justify-content: space-between; }
+  .day b { font: 800 28px/1 var(--cond); }
+  .day span { font-size: 14px; color: var(--muted); }
+  .day.free span { color: var(--pine); font-weight: 600; }
+  .day.few { background: #ffe2d1; }
+  .day.few span { color: #a3400d; font-weight: 600; }
+  .day.full { background: transparent; border: 1px dashed var(--stone); }
+  .day.full b { color: var(--stone); }
+  .day.pick { background: var(--pine); color: #fff; }
+  .day.pick span { color: #cfe0d6; }
+  .day.past { visibility: hidden; }
+
+  .routes { background: var(--lake); color: var(--birch); padding-block: 90px; }
+  .routes h2 { color: var(--birch); margin-bottom: 40px; }
+  .rgrid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 24px; }
+  .route img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+  .route:first-child img { aspect-ratio: 16 / 11; }
+  .route h3 { font: 800 34px/1 var(--cond); text-transform: uppercase; margin-top: 16px; }
+  .route p { color: #a9bab4; font-size: 16px; }
+  .route .km { display: flex; gap: 16px; margin-top: 10px; font-weight: 600; color: var(--vest); }
+
+  .price { padding-block: 80px; }
+  .price .in { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .price div { padding: 10px 30px; border-left: 2px solid var(--pine); }
+  .price b { display: block; font: 800 64px/1 var(--cond); color: var(--pine); }
+  .price span { color: var(--muted); }
+  .foot { background: var(--pine); color: #a9bab4; padding: 30px 40px; font-size: 14px; text-align: center; }
+
+  @container (max-width: 600px) {
+    .in { padding-inline: 18px; }
+    .hero { height: 760px; }
+    .head nav { display: none; }
+    .head { justify-content: space-between; padding-block: 18px; }
+    .logo { font-size: 28px; }
+    .hero h1 { font-size: 98px; }
+    .hero .row { flex-direction: column; align-items: stretch; gap: 20px; padding-bottom: 26px; }
+    .hero .row p { font-size: 18px; }
+    .avail { padding-block: 50px; }
+    .avail h2, .routes h2 { font-size: 46px; }
+    .avail .top { flex-direction: column; align-items: start; gap: 10px; }
+    .cal { gap: 4px; }
+    .day { min-height: 62px; padding: 6px; border-radius: 8px; }
+    .day b { font-size: 20px; }
+    .day span { font-size: 10px; line-height: 1.2; }
+    .rgrid, .price .in { grid-template-columns: 1fr; gap: 26px; }
+    .routes { padding-block: 50px; }
+    .price div { border-left: 0; border-top: 2px solid var(--pine); padding: 14px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero">
+    <img src="photos/tihiy-2.jpg" alt="Байдарка на северном озере">
+    <div class="in">
+      <header class="head"><span class="logo">ТИХИЙ ХОД</span><nav><span>Лодки</span><span>Маршруты</span><span>Цены</span><span>Как доехать</span></nav><span class="tel">+7 921 455-18-90</span></header>
+      <h1>Онего<br>на вёслах</h1>
+      <div class="row"><p>Прокат байдарок у Медвежьегорска. Лодка, вёсла и жилеты готовы к вашему приезду, инструктор покажет маршрут на карте.</p><button class="vestbtn">Посмотреть свободные даты</button></div>
+    </div>
+  </section>
+
+  <section class="avail"><div class="in">
+    <div class="top"><h2>Свободные лодки<br>в июле</h2><p>Всего у нас 14 двухместных байдарок. В каждой клетке видно, сколько осталось на этот день.</p></div>
+    <div class="legend"><span><i style="background:#fff;border:1px solid #c9cec6"></i>свободно</span><span><i style="background:#ffe2d1"></i>осталось мало</span><span><i style="border:1px dashed #c9cec6"></i>всё занято</span></div>
+    <div class="cal">
+      <span class="dow">пн</span><span class="dow">вт</span><span class="dow">ср</span><span class="dow">чт</span><span class="dow">пт</span><span class="dow">сб</span><span class="dow">вс</span>
+      <div class="day past"></div><div class="day free"><b>1</b><span>11 лодок</span></div><div class="day free"><b>2</b><span>12 лодок</span></div><div class="day free"><b>3</b><span>9 лодок</span></div><div class="day few"><b>4</b><span>2 лодки</span></div><div class="day full"><b>5</b><span>занято</span></div><div class="day full"><b>6</b><span>занято</span></div>
+      <div class="day free"><b>7</b><span>14 лодок</span></div><div class="day free"><b>8</b><span>13 лодок</span></div><div class="day free"><b>9</b><span>10 лодок</span></div><div class="day pick"><b>10</b><span>7 лодок, ваша дата</span></div><div class="day few"><b>11</b><span>3 лодки</span></div><div class="day few"><b>12</b><span>1 лодка</span></div><div class="day full"><b>13</b><span>занято</span></div>
+      <div class="day free"><b>14</b><span>14 лодок</span></div><div class="day free"><b>15</b><span>12 лодок</span></div><div class="day free"><b>16</b><span>11 лодок</span></div><div class="day free"><b>17</b><span>8 лодок</span></div><div class="day few"><b>18</b><span>2 лодки</span></div><div class="day full"><b>19</b><span>занято</span></div><div class="day few"><b>20</b><span>4 лодки</span></div>
+    </div>
+  </div></section>
+
+  <section class="routes"><div class="in">
+    <h2>Три маршрута</h2>
+    <div class="rgrid">
+      <article class="route"><img src="photos/tihiy-hero.jpg" alt=""><h3>Губа и острова</h3><p>Спокойная вода в заливе, обед на острове с песчаным пляжем. Подходит для первого раза.</p><p class="km"><span>12 км</span><span>5 часов</span></p></article>
+      <article class="route"><img src="photos/tihiy-3.jpg" alt=""><h3>Два дня до мыса</h3><p>Ночёвка в палатке, место для костра уже есть.</p><p class="km"><span>28 км</span><span>2 дня</span></p></article>
+      <article class="route"><img src="photos/tihiy-4.jpg" alt=""><h3>Закат на воде</h3><p>Вечерний выход с инструктором, возвращаемся к 23:00.</p><p class="km"><span>6 км</span><span>3 часа</span></p></article>
+    </div>
+  </div></section>
+
+  <section class="price"><div class="in">
+    <div><b>2 400 ₽</b><span>байдарка на день, с вёслами и жилетами</span></div>
+    <div><b>4 200 ₽</b><span>на два дня, палатку дадим бесплатно</span></div>
+    <div><b>1 500 ₽</b><span>инструктор на маршруте, за человека</span></div>
+  </div></section>
+
+  <footer class="foot">Прокат «Тихий ход», Медвежьегорск, Республика Карелия</footer>
+</div>
+<script src="live.js"></script>
+</body>
+</html>

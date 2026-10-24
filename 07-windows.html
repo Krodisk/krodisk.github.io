@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ковалёв 95</title>
+<style>
+  /* Рабочий стол Windows 95: работы лежат в папке, сайты открываются в «Обозревателе», о себе в «Блокноте» */
+  :root {
+    --face: #c0c0c0;
+    --hi: #ffffff;
+    --lo: #808080;
+    --dk: #000000;
+    --navy: #000080;
+    --teal: #008080;
+    --sel: #000080;
+    --ui: Tahoma, "MS Sans Serif", Verdana, "Segoe UI", sans-serif;
+    --mono: "Courier New", Courier, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body { background: var(--teal); font: 13px/1.35 var(--ui); color: #000; user-select: none; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  img { display: block; max-width: 100%; }
+  :focus-visible { outline: 1px dotted #000; outline-offset: -4px; }
+
+  .raised { background: var(--face); box-shadow: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--lo), inset 2px 2px #dfdfdf; }
+  .sunken { background: #fff; box-shadow: inset 1px 1px var(--lo), inset -1px -1px var(--hi), inset 2px 2px var(--dk), inset -2px -2px #dfdfdf; }
+  .btn { background: var(--face); border: 0; padding: 4px 14px; min-width: 76px; box-shadow: inset -1px -1px var(--dk), inset 1px 1px var(--hi), inset -2px -2px var(--lo), inset 2px 2px #dfdfdf; }
+  .btn:active, .btn.down { box-shadow: inset 1px 1px var(--dk), inset -1px -1px var(--hi), inset 2px 2px var(--lo); }
+
+  /* загрузка */
+  .boot { position: fixed; inset: 0; z-index: 99999; background: #000; color: #fff; display: grid; place-items: center; text-align: center; transition: opacity .4s; }
+  .boot .logo { font: italic 700 46px Georgia, serif; }
+  .boot .logo span { font-style: normal; color: #ffcc00; }
+  .boot p { color: #aaa; margin-top: 10px; }
+  .boot .bar { width: 260px; height: 16px; margin: 24px auto 0; border: 1px solid #555; padding: 2px; }
+  .boot .bar i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(90deg, #0000c0 0 10px, transparent 10px 12px); animation: load 1.4s steps(20) forwards; }
+  @keyframes load { to { width: 100%; } }
+  .boot.gone { opacity: 0; pointer-events: none; }
+
+  /* иконки */
+  #desk { position: absolute; inset: 0 0 32px 0; padding: 10px; display: grid; grid-template-rows: repeat(auto-fill, 84px); grid-auto-flow: column; grid-auto-columns: 86px; gap: 6px; }
+  .ico { width: 82px; text-align: center; color: #fff; padding: 4px 2px; background: none; border: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .ico svg, .ico img { width: 34px; height: 34px; }
+  .ico span { padding: 1px 3px; line-height: 1.2; }
+  .ico.sel span { background: var(--sel); outline: 1px dotted #ff0; }
+  .win .ico { color: #000; }
+  .win .ico.sel span { color: #fff; }
+
+  /* окна */
+  .win { position: absolute; padding: 3px; display: flex; flex-direction: column; min-width: 240px; max-width: calc(100vw - 8px); max-height: calc(100vh - 40px); }
+  .win[hidden] { display: none; }
+  .tbar { height: 20px; display: flex; align-items: center; gap: 4px; padding: 0 2px 0 4px; color: #d4d0c8; font-weight: 700; background: linear-gradient(90deg, #808080, #b5b5b5); flex: none; touch-action: none; }
+  .win.active .tbar { color: #fff; background: linear-gradient(90deg, var(--navy), #1084d0); }
+  .tbar span { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tbar button { width: 18px; height: 16px; min-width: 0; padding: 0; font: 700 11px/1 var(--ui); display: grid; place-items: center; }
+  .menu { display: flex; gap: 14px; padding: 3px 6px; flex: none; }
+  .menu u { text-decoration: underline; }
+  .addr { display: flex; align-items: center; gap: 6px; padding: 2px 4px 4px; flex: none; }
+  .addr .sunken { flex: 1; padding: 3px 6px; white-space: nowrap; overflow: hidden; }
+  .body { margin: 2px; overflow: auto; flex: 1; min-height: 0; user-select: text; }
+  .status { margin: 2px; padding: 2px 6px; flex: none; display: flex; gap: 12px; box-shadow: inset 1px 1px var(--lo), inset -1px -1px var(--hi); }
+  .pad { padding: 12px 14px; }
+  .note { font: 14px/1.55 var(--mono); white-space: pre-wrap; padding: 8px 10px; }
+
+  /* проводник */
+  .explorer table { border-collapse: collapse; width: 100%; }
+  .explorer th { text-align: left; font-weight: 400; padding: 2px 8px; position: sticky; top: 0; background: var(--face); box-shadow: inset -1px -1px var(--lo), inset 1px 1px var(--hi); }
+  .explorer td { padding: 4px 8px; white-space: nowrap; }
+  .explorer tr.row { cursor: default; }
+  .explorer tr.row:hover td { background: #e8e8f6; }
+  .explorer tr.row.sel td { background: var(--sel); color: #fff; }
+  .explorer td img { width: 52px; height: 32px; object-fit: cover; object-position: top; display: inline-block; vertical-align: middle; margin-right: 8px; border: 1px solid var(--lo); }
+
+  /* кейс */
+  .case h2 { font: 700 20px var(--ui); margin-bottom: 6px; }
+  .case h3 { font: 700 13px var(--ui); margin: 14px 0 6px; }
+  .case ul { padding-left: 18px; }
+  .case li { margin-bottom: 6px; }
+  .case .res { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .case .res div { padding: 8px; }
+  .case .res b { display: block; font-size: 22px; }
+  .case blockquote { margin-top: 12px; padding: 8px 10px; background: #ffffe1; border: 1px solid #000; }
+  .case .acts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+  .xl { border-collapse: collapse; width: 100%; background: #fff; }
+  .xl td, .xl th { border: 1px solid #c6c6c6; padding: 4px 8px; text-align: left; white-space: nowrap; }
+  .xl th { background: var(--face); font-weight: 400; text-align: center; }
+  .xl td:first-child { background: var(--face); text-align: center; color: #333; }
+  .field { display: block; width: 100%; font: inherit; padding: 4px; border: 0; margin: 3px 0 8px; }
+  label { display: block; }
+
+  /* панель задач */
+  #bar { position: absolute; left: 0; right: 0; bottom: 0; height: 32px; padding: 3px; display: flex; gap: 4px; align-items: center; z-index: 9999; }
+  #start { font-weight: 700; display: flex; align-items: center; gap: 6px; height: 26px; padding: 0 8px; min-width: 0; }
+  #start svg { width: 18px; height: 16px; }
+  #tasks { flex: 1; display: flex; gap: 4px; overflow: hidden; }
+  #tasks .btn { height: 26px; min-width: 0; max-width: 170px; flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 8px; }
+  #tasks .btn.down { background: #dcdcdc; font-weight: 700; }
+  #tray { padding: 4px 10px; height: 26px; box-shadow: inset 1px 1px var(--lo), inset -1px -1px var(--hi); white-space: nowrap; }
+  #startmenu { position: absolute; left: 2px; bottom: 32px; width: 240px; padding: 3px; display: none; z-index: 10000; }
+  #startmenu.open { display: flex; }
+  #startmenu .side { width: 28px; background: linear-gradient(0deg, var(--navy), #1084d0); color: #c0c0c0; writing-mode: vertical-rl; transform: rotate(180deg); font: 700 18px var(--ui); padding: 8px 4px; }
+  #startmenu .side b { color: #fff; }
+  #startmenu ul { list-style: none; flex: 1; }
+  #startmenu li button { width: 100%; text-align: left; padding: 8px 10px; background: none; border: 0; display: flex; gap: 10px; align-items: center; }
+  #startmenu li button:hover, #startmenu li button:focus-visible { background: var(--navy); color: #fff; }
+  #startmenu hr { border: 0; border-top: 1px solid var(--lo); border-bottom: 1px solid var(--hi); margin: 2px 0; }
+  .dialog-shade { position: fixed; inset: 0; z-index: 20000; display: none; place-items: center; }
+  .dialog-shade.open { display: grid; }
+
+  @media (max-width: 700px) {
+    .win { left: 4px !important; right: 4px; top: 4px !important; width: auto !important; height: auto !important; max-height: calc(100% - 40px); }
+    #tasks .btn { max-width: 96px; }
+    .case .res { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .boot .bar i { animation: none; width: 100%; } .boot { transition: none; } }
+</style>
+</head>
+<body>
+<div class="boot" id="boot" role="status"><div><div class="logo">Ковалёв<span>95</span></div><p>Загрузка рабочего стола…</p><div class="bar"><i></i></div></div></div>
+<div id="desk"></div>
+<div id="startmenu" class="raised" role="menu"><div class="side"><b>Ковалёв</b>95</div><ul id="smlist"></ul></div>
+<div id="bar" class="raised">
+  <button id="start" class="btn" aria-haspopup="true"><svg viewBox="0 0 18 16" aria-hidden="true"><rect x="1" y="1" width="7" height="6" fill="#e33"/><rect x="10" y="1" width="7" height="6" fill="#3a3"/><rect x="1" y="9" width="7" height="6" fill="#36f"/><rect x="10" y="9" width="7" height="6" fill="#fc0"/></svg>Пуск</button>
+  <div id="tasks"></div>
+  <div id="tray"></div>
+</div>
+<div class="dialog-shade" id="dlg"></div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const coarse = matchMedia('(pointer: coarse)').matches;
+
+/* пиксельные значки */
+const ICONS = {
+  folder: '<svg viewBox="0 0 32 32"><path d="M2 8h11l3 3h14v17H2z" fill="#f5d36b" stroke="#000"/><path d="M2 13h28" stroke="#c9a12c"/></svg>',
+  ie: '<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#3a8be0" stroke="#000"/><path d="M8 17h16M16 5c-4 4-4 18 0 22M16 5c4 4 4 18 0 22" stroke="#bfe0ff" fill="none"/><path d="M3 22c6-12 20-18 27-14" stroke="#ffd400" stroke-width="3" fill="none"/></svg>',
+  txt: '<svg viewBox="0 0 32 32"><path d="M6 2h15l5 5v23H6z" fill="#fff" stroke="#000"/><path d="M10 11h12M10 15h12M10 19h12M10 23h8" stroke="#000080"/></svg>',
+  xls: '<svg viewBox="0 0 32 32"><path d="M6 2h15l5 5v23H6z" fill="#fff" stroke="#000"/><path d="M9 10h14v14H9zM9 15h14M9 20h14M14 10v14M19 10v14" stroke="#1f7a3a" fill="none"/></svg>',
+  mail: '<svg viewBox="0 0 32 32"><rect x="3" y="8" width="26" height="17" fill="#fffbe0" stroke="#000"/><path d="M3 8l13 10 13-10" stroke="#000" fill="none"/></svg>',
+  doc: '<svg viewBox="0 0 32 32"><path d="M6 2h15l5 5v23H6z" fill="#fff" stroke="#000"/><rect x="9" y="9" width="14" height="4" fill="#2b4fb5"/><path d="M9 17h14M9 21h14M9 25h10" stroke="#555"/></svg>',
+  bin: '<svg viewBox="0 0 32 32"><path d="M8 9h16l-2 20H10z" fill="#ddd" stroke="#000"/><path d="M6 9h20M13 6h6v3M12 13v12M16 13v12M20 13v12" stroke="#000" fill="none"/></svg>',
+  page: '<svg viewBox="0 0 32 32"><rect x="3" y="5" width="26" height="22" fill="#fff" stroke="#000"/><rect x="3" y="5" width="26" height="4" fill="#000080"/></svg>'
+};
+
+const desk = $('#desk'), tasks = $('#tasks');
+let z = 10, offset = 0;
+const open = {};
+
+function icon(label, kind, onOpen, extra = '') {
+  const b = document.createElement('button');
+  b.className = 'ico';
+  b.innerHTML = `${ICONS[kind]}<span>${esc(label)}</span>${extra}`;
+  b.addEventListener('click', e => {
+    e.stopPropagation();
+    document.querySelectorAll('.ico.sel').forEach(x => x.classList.remove('sel'));
+    b.classList.add('sel');
+    if (coarse) onOpen();
+  });
+  b.addEventListener('dblclick', onOpen);
+  b.addEventListener('keydown', e => { if (e.key === 'Enter') onOpen(); });
+  return b;
+}
+
+function win(key, title, opts, build) {
+  if (open[key]) { focus(open[key]); return open[key]; }
+  const el = document.createElement('section');
+  el.className = 'win raised';
+  el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', title);
+  const w = Math.min(opts.w || 420, innerWidth - 16), h = opts.h ? Math.min(opts.h, innerHeight - 60) : null;
+  el.style.width = w + 'px'; if (h) el.style.height = h + 'px';
+  el.style.left = (opts.x ?? Math.max(8, Math.min(110 + offset, innerWidth - w - 10))) + 'px';
+  el.style.top = (opts.y ?? Math.max(8, Math.min(30 + offset, innerHeight - (h || 300) - 50))) + 'px';
+  offset = (offset + 26) % 160;
+  el.innerHTML = `<div class="tbar">${ICONS[opts.icon || 'page'].replace('<svg', '<svg width="16" height="16"')}<span>${esc(title)}</span><button class="btn" data-act="min" aria-label="Свернуть">_</button><button class="btn" data-act="close" aria-label="Закрыть">✕</button></div>`;
+  build(el);
+  document.body.appendChild(el);
+  const tb = document.createElement('button');
+  tb.className = 'btn'; tb.textContent = title;
+  tb.onclick = () => { if (el.hidden) { el.hidden = false; focus(el); } else if (el.classList.contains('active')) { el.hidden = true; tb.classList.remove('down'); } else focus(el); };
+  tasks.appendChild(tb);
+  el._tb = tb; open[key] = el;
+  el.querySelector('[data-act="close"]').onclick = () => close(key);
+  el.querySelector('[data-act="min"]').onclick = () => { el.hidden = true; tb.classList.remove('down'); };
+  el.addEventListener('pointerdown', () => focus(el));
+  drag(el, el.querySelector('.tbar'));
+  focus(el);
+  return el;
+}
+function close(key) { const el = open[key]; if (!el) return; el.remove(); el._tb.remove(); delete open[key]; }
+function focus(el) {
+  document.querySelectorAll('.win').forEach(w => { w.classList.remove('active'); w._tb && w._tb.classList.remove('down'); });
+  el.hidden = false; el.classList.add('active'); el.style.zIndex = ++z; el._tb.classList.add('down');
+}
+function drag(el, handle) {
+  handle.addEventListener('pointerdown', e => {
+    if (e.target.closest('button') || matchMedia('(max-width: 700px)').matches) return;
+    const sx = e.clientX, sy = e.clientY, ox = el.offsetLeft, oy = el.offsetTop;
+    handle.setPointerCapture(e.pointerId);
+    handle.onpointermove = m => {
+      el.style.left = Math.min(innerWidth - 60, Math.max(-el.offsetWidth + 80, ox + m.clientX - sx)) + 'px';
+      el.style.top = Math.min(innerHeight - 60, Math.max(0, oy + m.clientY - sy)) + 'px';
+    };
+  });
+  handle.addEventListener('pointerup', () => handle.onpointermove = null);
+}
+const menuBar = items => `<div class="menu">${items.map(t => `<span><u>${t[0]}</u>${t.slice(1)}</span>`).join('')}</div>`;
+
+/* приложения */
+const apps = {
+  works() {
+    win('works', 'Мои работы', { w: 640, h: 380, icon: 'folder' }, el => {
+      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид', 'Справка']) + `<div class="body sunken explorer"><table><thead><tr><th>Имя</th><th>Тип</th><th>Город</th><th>Год</th></tr></thead><tbody>${P.map((p, i) => `<tr class="row" data-i="${i}" tabindex="0"><td><img src="${shot(p, 'desk')}" alt="">${esc(p.name)}</td><td>${esc(p.kind)}</td><td>${esc(p.city)}</td><td>${p.year}</td></tr>`).join('')}</tbody></table></div><div class="status"><span>Объектов: ${P.length}</span><span>Дважды щёлкните, чтобы открыть сайт и кейс</span></div>`);
+      el.querySelectorAll('tr.row').forEach(r => {
+        const go = () => openProject(+r.dataset.i);
+        r.addEventListener('click', () => { el.querySelectorAll('tr.sel').forEach(x => x.classList.remove('sel')); r.classList.add('sel'); if (coarse) go(); });
+        r.addEventListener('dblclick', go);
+        r.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+      });
+    });
+  },
+  about() {
+    win('about', 'обо_мне.txt - Блокнот', { w: 470, h: 420, icon: 'txt', x: Math.max(8, innerWidth - 520), y: 24 }, el => {
+      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Поиск', 'Справка']) + `<div class="body sunken note">${esc(D.name)}
+веб-дизайнер, ${esc(D.city)}
+шесть концептов сайтов для малого дела
+
+${D.about.map(esc).join('\n\n')}
+
+Инструменты: ${esc(D.tools.join(', '))}.
+
+P.S. Этот рабочий стол тоже нарисовал я.</div>`);
+    });
+  },
+  process() {
+    win('process', 'как_работаем.doc - WordPad', { w: 500, h: 400, icon: 'doc' }, el => {
+      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид', 'Вставка', 'Формат']) + `<div class="body sunken pad"><h2 style="font:700 18px var(--ui);margin-bottom:10px">Как идёт работа</h2><ol style="padding-left:20px">${D.process.map(s => `<li style="margin-bottom:8px"><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ol></div>`);
+    });
+  },
+  price() {
+    win('price', 'цены.xls', { w: 560, h: 260, icon: 'xls' }, el => {
+      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид', 'Данные']) + `<div class="body sunken"><table class="xl"><tr><th></th><th>A</th><th>B</th><th>C</th></tr><tr><td>1</td><td><b>Что</b></td><td><b>Цена</b></td><td><b>Срок</b></td></tr>${D.services.map((s, i) => `<tr><td>${i + 2}</td><td>${esc(s.name)}</td><td>${esc(s.price)}</td><td>${esc(s.time)}</td></tr>`).join('')}<tr><td>${D.services.length + 2}</td><td colspan="3"><i>Свободное окно: ${esc(D.window)}</i></td></tr></table></div><div class="status"><span>Готово</span></div>`);
+    });
+  },
+  mail() {
+    win('mail', 'Новое сообщение', { w: 420, icon: 'mail' }, el => {
+      el.insertAdjacentHTML('beforeend', `<div class="body pad" style="background:var(--face)"><label>Кому:<input class="field sunken" id="m-to" value="${esc(D.email)}" readonly></label><label>Тема:<input class="field sunken" id="m-subj" value="Нужен сайт"></label><label>Текст:<textarea class="field sunken" id="m-txt" rows="5">Здравствуйте! Мы занимаемся </textarea></label><div class="case"><div class="acts"><button class="btn" id="m-send">Открыть в почте</button><button class="btn" id="m-copy">Скопировать адрес</button></div></div><p style="margin-top:10px">Или телеграм ${esc(D.telegram)}</p></div>`);
+      el.querySelector('#m-send').onclick = () => location.href = `mailto:${D.email}?subject=${encodeURIComponent(el.querySelector('#m-subj').value)}&body=${encodeURIComponent(el.querySelector('#m-txt').value)}`;
+      el.querySelector('#m-copy').onclick = async e => {
+        try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+        catch { const f = el.querySelector('#m-to'); f.select(); e.target.textContent = 'Выделено'; }
+      };
+    });
+  },
+  bin() {
+    win('bin', 'Корзина', { w: 440, h: 300, icon: 'bin' }, el => {
+      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид']) + `<div class="body sunken pad" style="display:flex;flex-wrap:wrap;gap:6px;align-content:start"></div><div class="status"><span>Здесь то, от чего я отговариваю клиентов</span></div>`);
+      const b = el.querySelector('.body');
+      [['видео_на_фоне.mp4', 'Страница весит 40 МБ и грузится минуту. На телефоне в дороге не откроется вовсе.'], ['попап_через_3_сек.exe', 'Человек ещё не понял, куда попал, а его уже просят подписаться.'], ['карусель_отзывов.js', 'Отзывы, которые сами уезжают, никто не дочитывает.'], ['весы_фемиды.png', 'Есть на каждом втором сайте юристов. Здесь их нет.'], ['как_у_apple.doc', 'У Apple нет пекарни на Чернышевского.']].forEach(([n, t]) => b.appendChild(icon(n, 'txt', () => alertBox(n, t))));
+    });
+  },
+  ie(url) { /* пустое окно не нужно, открываем папку */ apps.works(); }
+};
+
+function openProject(i) {
+  const p = P[i];
+  const big = innerWidth > 1100;
+  win('ie-' + p.id, `${p.name} - Обозреватель`, { w: big ? Math.min(820, innerWidth * .56) : 680, h: innerHeight - 80, icon: 'ie', x: 20, y: 14 }, el => {
+    el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид', 'Избранное', 'Справка']) + `<div class="addr">Адрес<div class="sunken">http://www.${p.id}.ru/</div></div><div class="body sunken" tabindex="0"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div><div class="status"><span>Готово</span><span>Макет ${p.year} года</span></div>`);
+  });
+  win('case-' + p.id, `кейс_${p.id}.txt`, { w: big ? 400 : 440, h: Math.min(600, innerHeight - 90), icon: 'txt', x: big ? Math.min(innerWidth - 420, 20 + Math.min(820, innerWidth * .56) + 14) : undefined, y: big ? 40 : undefined }, el => {
+    el.insertAdjacentHTML('beforeend', `<div class="body sunken pad case"><h2>${esc(p.name)}</h2><p>${esc(p.client)}, ${esc(p.city)}, ${p.year}. ${esc(p.kind)}.</p>
+      <h3>Задача</h3><p>${esc(p.problem)}</p>
+      <h3>Что сделали</h3><ul>${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+      <h3>В цифрах</h3><div class="res">${p.result.map(([a, b]) => `<div class="raised"><b>${esc(a)}</b>${esc(b)}</div>`).join('')}</div>
+      <blockquote>«${esc(p.quote)}» ${esc(p.quoteBy)}</blockquote>
+      <div class="acts"><button class="btn" data-mob="${i}">Версия для телефона</button><button class="btn" data-next="${(i + 1) % P.length}">Следующий проект</button></div></div>`);
+    el.querySelector('[data-mob]').onclick = () => win('mob-' + p.id, `${p.name} на телефоне`, { w: 330, h: Math.min(680, innerHeight - 60), icon: 'ie' }, w => w.insertAdjacentHTML('beforeend', `<div class="body sunken"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div>`));
+    el.querySelector('[data-next]').onclick = () => openProject((i + 1) % P.length);
+  });
+}
+
+function alertBox(title, text) {
+  const d = $('#dlg');
+  d.innerHTML = `<div class="win raised active" style="position:relative;width:360px" role="alertdialog" aria-label="${esc(title)}"><div class="tbar"><span>${esc(title)}</span></div><div class="pad" style="display:flex;gap:12px;align-items:flex-start"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="#fff" stroke="#000"/><text x="16" y="22" text-anchor="middle" font-weight="700" font-size="18" fill="#000080">i</text></svg><p>${esc(text)}</p></div><div style="text-align:center;padding:4px 0 10px"><button class="btn" id="dlg-ok">ОК</button></div></div>`;
+  d.classList.add('open'); $('#dlg-ok').focus();
+  $('#dlg-ok').onclick = () => d.classList.remove('open');
+}
+
+/* рабочий стол */
+desk.appendChild(icon('Мои работы', 'folder', apps.works));
+desk.appendChild(icon('Обозреватель', 'ie', apps.ie));
+desk.appendChild(icon('обо_мне.txt', 'txt', apps.about));
+desk.appendChild(icon('как_работаем.doc', 'doc', apps.process));
+desk.appendChild(icon('цены.xls', 'xls', apps.price));
+desk.appendChild(icon('Написать', 'mail', apps.mail));
+desk.appendChild(icon('Корзина', 'bin', apps.bin));
+document.addEventListener('click', () => document.querySelectorAll('.ico.sel').forEach(x => x.classList.remove('sel')));
+
+const sm = $('#startmenu');
+[['Мои работы', 'folder', apps.works], ['Обо мне', 'txt', apps.about], ['Как работаем', 'doc', apps.process], ['Цены', 'xls', apps.price], ['Написать', 'mail', apps.mail], null, ['Завершение работы…', 'page', () => alertBox('Завершение работы', 'Не выключайте компьютер. Лучше напишите мне: ' + D.email)]].forEach(it => {
+  if (!it) { $('#smlist').insertAdjacentHTML('beforeend', '<hr>'); return; }
+  const li = document.createElement('li');
+  li.innerHTML = `<button role="menuitem">${ICONS[it[1]].replace('<svg', '<svg width="22" height="22"')}${it[0]}</button>`;
+  li.firstChild.onclick = () => { sm.classList.remove('open'); $('#start').classList.remove('down'); it[2](); };
+  $('#smlist').appendChild(li);
+});
+$('#start').onclick = e => { e.stopPropagation(); const o = sm.classList.toggle('open'); e.currentTarget.classList.toggle('down', o); };
+document.addEventListener('click', e => { if (!sm.contains(e.target)) { sm.classList.remove('open'); $('#start').classList.remove('down'); } });
+
+function clock() { $('#tray').textContent = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); }
+clock(); setInterval(clock, 15000);
+
+/* загрузка и первые окна */
+const boot = $('#boot');
+const ready = () => { boot.classList.add('gone'); setTimeout(() => boot.remove(), 500); };
+boot.addEventListener('click', ready);
+setTimeout(ready, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1500);
+apps.works();
+apps.about();
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ковалёв, открытые вкладки</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Портфолио как браузер с открытыми вкладками: каждый сайт клиента живой, с пометками дизайнера прямо на макете */
+  :root {
+    --frame: #dde1e8;
+    --frame-dark: #c9ced8;
+    --tab: #ffffff;
+    --ink: #1b1d22;
+    --soft: #626875;
+    --pin: #ff4f00;
+    --pin-soft: #fff0e8;
+    --page: #f6f7f9;
+    --ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+    --text: "Golos Text", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--frame); color: var(--ink); font: 400 16px/1.5 var(--text); display: flex; flex-direction: column; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--pin); outline-offset: 2px; }
+
+  .tabs { display: flex; align-items: flex-end; gap: 2px; padding: 8px 10px 0; font: 13px var(--ui); overflow-x: auto; scrollbar-width: none; flex: none; }
+  .tab { display: flex; align-items: center; gap: 8px; min-width: 0; width: 200px; flex: none; padding: 9px 12px; border-radius: 10px 10px 0 0; color: #3e4350; position: relative; }
+  .tab:hover { background: rgba(255,255,255,.45); }
+  .tab[aria-selected="true"] { background: var(--tab); color: var(--ink); }
+  .tab i { width: 14px; height: 14px; border-radius: 4px; flex: none; }
+  .tab span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tab .x { margin-left: auto; opacity: .45; font-size: 15px; line-height: 1; }
+  .plus { padding: 8px 12px; color: var(--soft); font-size: 18px; }
+
+  .bar { background: var(--tab); display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-bottom: 1px solid var(--frame-dark); font: 14px var(--ui); flex: none; }
+  .bar .nav { display: flex; gap: 4px; color: var(--soft); }
+  .bar .nav button { width: 30px; height: 30px; border-radius: 50%; }
+  .bar .nav button:hover { background: var(--page); }
+  .url { flex: 1; background: var(--page); border-radius: 20px; padding: 7px 16px; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .url b { color: var(--ink); font-weight: 500; }
+  .notes-btn { border: 1px solid var(--frame-dark); border-radius: 20px; padding: 6px 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .notes-btn i { width: 18px; height: 18px; border-radius: 50%; background: var(--pin); color: #fff; font-style: normal; font-size: 11px; display: grid; place-items: center; }
+  .notes-btn[aria-pressed="false"] i { background: var(--soft); }
+
+  .view { flex: 1; min-height: 0; background: var(--tab); display: flex; }
+  .pane { flex: 1; min-width: 0; overflow-y: auto; position: relative; }
+
+  /* домашняя вкладка */
+  .home { max-width: 1120px; margin: 0 auto; padding: 70px 40px 90px; }
+  .home h1 { font: 700 clamp(40px, 5vw, 72px)/1.02 var(--text); letter-spacing: -.035em; max-width: 16ch; }
+  .home .lead { font-size: 21px; color: var(--soft); max-width: 46ch; margin-top: 20px; }
+  .home h2 { font: 600 24px var(--text); margin: 70px 0 20px; letter-spacing: -.01em; }
+  .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .thumb { text-align: left; }
+  .thumb .img { border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px var(--frame-dark); aspect-ratio: 16 / 10; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .4s; }
+  .thumb:hover img { transform: scale(1.03); }
+  .thumb b { display: block; margin-top: 10px; font-weight: 600; }
+  .thumb span { color: var(--soft); font-size: 14px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+  .two p + p { margin-top: .8em; }
+  .plist div { display: flex; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--frame); }
+  .plist b { font-weight: 600; white-space: nowrap; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; background: var(--page); border-radius: 12px; padding: 16px 18px; font-size: 15px; color: var(--soft); }
+  .steps li::before { content: counter(s); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .steps b { display: block; color: var(--ink); font-weight: 600; }
+  .mail { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font: 700 clamp(28px, 4vw, 52px) var(--text); letter-spacing: -.03em; }
+  .mail button { font: 500 15px var(--text); letter-spacing: 0; border: 1px solid var(--frame-dark); border-radius: 20px; padding: 6px 14px; }
+
+  /* вкладка проекта */
+  .shot { position: relative; max-width: 1440px; margin: 0 auto; }
+  .shot img { width: 100%; }
+  .pinm { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50% 50% 50% 4px; background: var(--pin); color: #fff; font: 700 15px var(--text); display: grid; place-items: center; box-shadow: 0 0 0 4px rgba(255, 79, 0, .25), 0 6px 14px rgba(0,0,0,.25); transition: transform .2s; }
+  .pinm.hot { transform: scale(1.3); }
+  .hidepins .pinm { display: none; }
+  .side { width: 380px; flex: none; border-left: 1px solid var(--frame); overflow-y: auto; background: #fff; }
+  .side .in { padding: 24px 24px 40px; }
+  .side .meta { color: var(--soft); font-size: 14px; }
+  .side h2 { font: 700 34px/1.05 var(--text); letter-spacing: -.03em; margin: 4px 0 14px; }
+  .side .problem { font-size: 15.5px; }
+  .side h3 { font: 600 13px var(--ui); color: var(--soft); margin: 26px 0 10px; }
+  .note { display: flex; gap: 12px; padding: 12px; margin: 0 -12px; border-radius: 10px; text-align: left; width: calc(100% + 24px); }
+  .note:hover, .note.hot { background: var(--pin-soft); }
+  .note i { flex: none; width: 24px; height: 24px; border-radius: 50% 50% 50% 3px; background: var(--pin); color: #fff; font: 700 12px var(--text); font-style: normal; display: grid; place-items: center; }
+  .note span { font-size: 15px; }
+  .res { display: grid; gap: 8px; }
+  .res div { display: flex; gap: 12px; align-items: baseline; }
+  .res b { font: 700 26px var(--text); letter-spacing: -.02em; min-width: 92px; }
+  .res span { color: var(--soft); font-size: 14px; }
+  .side blockquote { margin-top: 24px; font: 600 19px/1.35 var(--text); }
+  .side cite { display: block; font: 400 14px var(--text); color: var(--soft); font-style: normal; margin-top: 4px; }
+  .phone { margin-top: 24px; border: 6px solid var(--ink); border-radius: 26px; height: 520px; overflow-y: auto; scrollbar-width: none; }
+  .hidden { display: none !important; }
+
+  @media (max-width: 900px) {
+    .tab { width: 150px; }
+    .bar .nav { display: none; }
+    .view { flex-direction: column; overflow-y: auto; }
+    .pane { overflow: visible; flex: none; }
+    .side { width: auto; border-left: 0; border-top: 1px solid var(--frame); overflow: visible; }
+    .home { padding: 40px 16px 60px; }
+    .thumbs, .two, .steps { grid-template-columns: 1fr; }
+    .pinm { width: 24px; height: 24px; margin: -12px 0 0 -12px; font-size: 11px; }
+    .shot { max-height: 70vh; overflow-y: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { .thumb img, .pinm { transition: none; } }
+</style>
+</head>
+<body>
+<div class="tabs" role="tablist" id="tabs" aria-label="Открытые сайты"></div>
+<div class="bar">
+  <div class="nav"><button aria-label="Назад" id="back">←</button><button aria-label="Вперёд" id="fwd">→</button><button aria-label="Обновить">↻</button></div>
+  <div class="url" id="url"></div>
+  <button class="notes-btn hidden" id="notes-btn" aria-pressed="true"><i id="notes-n">4</i>Пометки</button>
+</div>
+<div class="view" id="view">
+  <div class="pane" id="pane" role="tabpanel"></div>
+  <aside class="side hidden" id="side"></aside>
+</div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* пометки: x и y в процентах от полной картинки страницы */
+const NOTES = {
+  opara: [[4, 7, 'Заголовок сразу отвечает на главный вопрос покупателя: можно ли отложить хлеб.'], [31, 15, 'Карточка брони видна на первом экране. Не нужно искать корзину.'], [17, 52, 'Полоска остатка. Когда она кончается, бронь на этот хлеб закрывается сама.'], [10, 64.5, 'Три шага пронумерованы, потому что это правда последовательность.']],
+  zubr: [[5, 21, 'Цена первого приёма видна до того, как человек оставит телефон.'], [71, 6, 'Прогресс из трёх шагов вместо семи экранов.'], [71, 18, 'Занятое время зачёркнуто, а не спрятано. Видно, что запись живая.'], [21, 44, 'Вместо лиц врачей их кабинеты. Человеку важно понять, куда он идёт.']],
+  tihiy: [[4, 13, 'Узкий шрифт как надписи на причале. Помещается крупно даже на телефоне.'], [83, 30, 'Единственный яркий цвет на сайте, оранжевый спасжилет. Это кнопка.'], [50, 49, 'В каждой клетке число свободных лодок. Главная часть страницы.'], [14, 91, 'Цены тремя числами, без таблицы и сносок.']],
+  plenka: [[5, 11, 'Жёлтый с коробок плёнки «Свема».'], [45, 50, 'Расписание как монтажный стол: залы по строкам, время по горизонтали.'], [86, 46.5, 'Свой список подсвечен жёлтым, хранится в браузере без регистрации.'], [19, 66.5, 'Вишнёвый взят с кресел главного зала.']],
+  suharev: [[5, 7.5, 'Ни синего, ни весов. Как у всех остальных.'], [86, 27, 'Главный образ: папка с делом и печать «Исполнено».'], [45, 52, 'Дела с суммой, сроком и итогом. Проигранные тоже здесь.'], [28, 82, 'Одна фотография на весь сайт, библиотека бюро.']],
+  sherst: [[15, 32, 'Фильтр по метражу и толщине, а не по бренду. Так ищут вязальщицы.'], [15, 56, 'Цвета показаны кружками ниток, без названий вроде «бургунди».'], [35, 48, 'Метраж и спицы видны прямо в карточке.'], [80, 7, 'Фон сайта того же серого, что картон на всех фото.']]
+};
+
+const tabsEl = $('#tabs'), pane = $('#pane'), side = $('#side');
+const tabs = [{ id: 'home', title: D.name + ', портфолио', color: '#1b1d22', url: `<b>kovalev.design</b>` }]
+  .concat(P.map(p => ({ id: p.id, title: `${p.name}, ${p.client.toLowerCase()}`, color: p.accent, url: `<b>${p.id}.ru</b>, макет ${p.year} года` })));
+tabsEl.innerHTML = tabs.map((t, i) => `<button class="tab" role="tab" id="tab-${t.id}" aria-selected="${i === 0}" data-id="${t.id}"><i style="background:${t.color}"></i><span>${esc(t.title)}</span><b class="x" aria-hidden="true">×</b></button>`).join('') + `<span class="plus" aria-hidden="true">+</span>`;
+
+const history_ = ['home']; let hpos = 0;
+function show(id, push = true) {
+  tabsEl.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.id === id));
+  const t = tabs.find(x => x.id === id);
+  $('#url').innerHTML = t.url;
+  document.title = id === 'home' ? 'Ковалёв, открытые вкладки' : t.title;
+  if (push && history_[hpos] !== id) { history_.splice(hpos + 1); history_.push(id); hpos = history_.length - 1; }
+  pane.scrollTop = 0;
+  if (id === 'home') return renderHome();
+  renderProject(P.find(p => p.id === id));
+}
+tabsEl.addEventListener('click', e => { const t = e.target.closest('.tab'); if (t) show(t.dataset.id); });
+$('#back').addEventListener('click', () => { if (hpos > 0) show(history_[--hpos], false); });
+$('#fwd').addEventListener('click', () => { if (hpos < history_.length - 1) show(history_[++hpos], false); });
+
+function renderHome() {
+  side.classList.add('hidden'); $('#notes-btn').classList.add('hidden');
+  pane.innerHTML = `<div class="home">
+    <h1>${esc(D.name)}. Сайты для малого дела</h1>
+    <p class="lead">${esc(D.city)}. Шесть концептов уже открыты во вкладках сверху, в каждом мои пометки о том, почему он устроен именно так.</p>
+    <h2>Открытые вкладки</h2>
+    <div class="thumbs">${P.map(p => `<button class="thumb" data-open="${p.id}"><div class="img"><img src="${shot(p, 'desk')}" alt="" loading="lazy"></div><b>${esc(p.name)}</b><span>${esc(p.client)}, ${esc(p.city)}, концепт</span></button>`).join('')}</div>
+    <h2>Обо мне</h2>
+    <div class="two"><div>${D.about.map(t => `<p>${esc(t)}</p>`).join('')}</div>
+      <div class="plist">${D.services.map(s => `<div><span>${esc(s.name)}<br><small style="color:var(--soft)">${esc(s.time)}</small></span><b>${esc(s.price)}</b></div>`).join('')}</div></div>
+    <h2>Как идёт работа</h2>
+    <ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}</b>${esc(s.text)}</li>`).join('')}</ol>
+    <h2>Написать</h2>
+    <div class="mail"><span id="mail">${esc(D.email)}</span><button id="copy">Скопировать</button></div>
+    <p style="color:var(--soft);margin-top:10px">Телеграм ${esc(D.telegram)}. Свободен с ${esc(D.windowFrom)}.</p>
+  </div>`;
+  pane.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => show(b.dataset.open)));
+  $('#copy').addEventListener('click', async e => {
+    try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+    catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено'; }
+    setTimeout(() => e.target.textContent = 'Скопировать', 2200);
+  });
+}
+
+function renderProject(p) {
+  const notes = NOTES[p.id];
+  side.classList.remove('hidden'); $('#notes-btn').classList.remove('hidden');
+  $('#notes-n').textContent = notes.length;
+  pane.innerHTML = `<div class="shot" id="shotwrap"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком">${notes.map(([x, y], i) => `<button class="pinm" style="left:${x}%;top:${y}%" data-n="${i}" aria-label="Пометка ${i + 1}">${i + 1}</button>`).join('')}</div>`;
+  side.innerHTML = `<div class="in">
+    <p class="meta">${esc(p.client)}, ${esc(p.city)}, ${p.year}. ${esc(p.kind)}</p>
+    <h2>${esc(p.name)}</h2><p class="problem">${esc(p.problem)}</p>
+    <h3>Пометки на макете</h3>${notes.map(([, , t], i) => `<button class="note" data-n="${i}"><i>${i + 1}</i><span>${esc(t)}</span></button>`).join('')}
+    <h3>Решение в цифрах</h3><div class="res">${p.result.map(([a, b]) => `<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>
+    <blockquote>«${esc(p.quote)}»<cite>${esc(p.quoteBy)}</cite></blockquote>
+    <h3>Так сайт выглядит на телефоне</h3><div class="phone" tabindex="0" aria-label="Мобильная версия, прокручивается"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия" loading="lazy"></div>
+  </div>`;
+  side.scrollTop = 0;
+  pane.classList.toggle('hidepins', $('#notes-btn').getAttribute('aria-pressed') === 'false');
+}
+function hot(n, on) {
+  document.querySelectorAll(`[data-n="${n}"]`).forEach(el => el.classList.toggle('hot', on));
+}
+document.addEventListener('mouseover', e => { const t = e.target.closest('[data-n]'); document.querySelectorAll('.hot').forEach(h => h.classList.remove('hot')); if (t) hot(t.dataset.n, true); });
+side.addEventListener('click', e => {
+  const t = e.target.closest('.note'); if (!t) return;
+  const pin = pane.querySelector(`.pinm[data-n="${t.dataset.n}"]`);
+  const scroller = matchMedia('(max-width: 900px)').matches ? $('#shotwrap') : pane;
+  scroller.scrollTo({ top: pin.offsetTop - scroller.clientHeight / 3, behavior: 'smooth' });
+  hot(t.dataset.n, true);
+});
+pane.addEventListener('click', e => {
+  const pin = e.target.closest('.pinm'); if (!pin) return;
+  const note = side.querySelector(`.note[data-n="${pin.dataset.n}"]`);
+  note.scrollIntoView({ block: 'center', behavior: 'smooth' }); hot(pin.dataset.n, true);
+});
+$('#notes-btn').addEventListener('click', e => {
+  const b = e.currentTarget, on = b.getAttribute('aria-pressed') !== 'true';
+  b.setAttribute('aria-pressed', on); pane.classList.toggle('hidepins', !on);
+});
+const start = tabs.find(t => '#' + t.id === location.hash);
+show(start ? start.id : 'home');
+</script>
+</body>
+</html>

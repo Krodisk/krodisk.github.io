@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Плёнка 2023</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<script>if (location.search.includes('m')) document.documentElement.classList.add('m')</script>
+<style>
+  /* Жёлтая плёнка «Свема» и вишнёвые кресла: расписание по залам как монтажный стол */
+  :root {
+    --yellow: #f3c234;
+    --cherry: #7a1027;
+    --ink: #1a1214;
+    --paper: #fbf8f1;
+    --muted: #6d6266;
+    --line: #e5ddd0;
+    --disp: "Unbounded", "Arial Black", sans-serif;
+    --text: "Golos Text", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html.m body { width: 390px; }
+  body { background: var(--paper); color: var(--ink); font: 400 17px/1.5 var(--text); }
+  img { display: block; max-width: 100%; }
+  .page { container-type: inline-size; }
+  .in { max-width: 1320px; margin: 0 auto; padding-inline: 40px; }
+
+  .hero { background: var(--yellow); position: relative; overflow: hidden; }
+  .head { display: flex; align-items: center; gap: 30px; padding-block: 24px; font-weight: 500; }
+  .head .logo { font: 900 22px var(--disp); }
+  .head nav { display: flex; gap: 26px; margin-left: auto; }
+  .head .tix { background: var(--ink); color: var(--yellow); padding: 10px 18px; border-radius: 4px; font-weight: 600; }
+  .hero .grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; align-items: end; padding-bottom: 60px; }
+  .hero h1 { font: 900 168px/.86 var(--disp); letter-spacing: -.05em; margin-top: 50px; }
+  .hero .when { display: flex; gap: 50px; margin-top: 34px; font-size: 19px; }
+  .hero .when b { display: block; font: 800 34px var(--disp); }
+  .frame { position: relative; height: 560px; background: var(--ink); padding: 26px 0; }
+  .frame::before, .frame::after { content: ""; position: absolute; left: 0; right: 0; height: 14px; background: radial-gradient(circle, var(--yellow) 4px, transparent 4.5px) 0 0 / 24px 14px repeat-x; }
+  .frame::before { top: 6px; } .frame::after { bottom: 6px; }
+  .frame img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.25) saturate(1.2); }
+  .frame span { position: absolute; left: 20px; bottom: 40px; background: var(--yellow); padding: 4px 10px; font-weight: 600; font-size: 14px; }
+
+  .sched { padding-block: 70px; }
+  .sched .top { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 26px; }
+  .sched h2 { font: 800 48px/1 var(--disp); letter-spacing: -.03em; }
+  .tabs { display: flex; gap: 8px; }
+  .tabs span { border: 2px solid var(--ink); padding: 10px 16px; font-weight: 600; border-radius: 4px; }
+  .tabs .on { background: var(--ink); color: var(--yellow); }
+  .filters { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .filters span { background: #fff; border: 1px solid var(--line); border-radius: 30px; padding: 6px 14px; font-size: 15px; }
+  .filters .on { background: var(--cherry); color: #fff; border-color: var(--cherry); }
+  .board { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .times, .hall { display: grid; grid-template-columns: 170px 1fr; }
+  .times { border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  .times .scale { position: relative; height: 34px; }
+  .times .scale span { position: absolute; top: 8px; transform: translateX(-50%); }
+  .hall { border-bottom: 1px solid var(--line); min-height: 104px; }
+  .hall:last-child { border-bottom: 0; }
+  .hall .name { padding: 16px 18px; border-right: 1px solid var(--line); font-weight: 600; }
+  .hall .name small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; }
+  .track { position: relative; background: repeating-linear-gradient(90deg, transparent 0 calc(100% / 13 - 1px), var(--line) calc(100% / 13 - 1px) calc(100% / 13)); }
+  .film { position: absolute; top: 12px; bottom: 12px; background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--ink); padding: 8px 10px; font-size: 14px; line-height: 1.25; overflow: hidden; }
+  .film b { display: block; font-weight: 600; }
+  .film span { color: var(--muted); font-size: 12px; }
+  .film.mine { background: var(--yellow); border-color: var(--ink); }
+  .film.mine::after { content: "в моём списке"; position: absolute; right: 8px; bottom: 6px; font-size: 11px; font-weight: 600; }
+  .film.sold { opacity: .45; }
+  .film.talk { border-left-color: var(--cherry); }
+
+  .films { background: var(--cherry); color: #f8e8ea; padding-block: 80px; }
+  .films h2 { font: 800 48px/1 var(--disp); color: var(--yellow); margin-bottom: 34px; letter-spacing: -.03em; }
+  .fgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+  .poster img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; }
+  .poster h3 { font: 800 19px/1.15 var(--disp); margin-top: 12px; color: #fff; }
+  .poster p { font-size: 14px; color: #e3b9c2; margin-top: 4px; }
+  .foot { background: var(--ink); color: #a9989d; padding: 30px 40px; font-size: 14px; text-align: center; }
+
+  @container (max-width: 600px) {
+    .in { padding-inline: 18px; }
+    .head nav { display: none; }
+    .head { justify-content: space-between; padding-block: 16px; }
+    .hero .grid { grid-template-columns: 1fr; gap: 26px; padding-bottom: 30px; }
+    .hero h1 { font-size: 76px; margin-top: 10px; }
+    .hero .when { gap: 24px; font-size: 15px; margin-top: 18px; }
+    .hero .when b { font-size: 22px; }
+    .frame { height: 260px; margin-inline: -18px; }
+    .sched { padding-block: 40px; }
+    .sched .top { flex-direction: column; align-items: start; gap: 14px; }
+    .sched h2, .films h2 { font-size: 30px; }
+    .tabs span { padding: 8px 10px; font-size: 14px; }
+    .times { display: none; }
+    .hall { grid-template-columns: 1fr; }
+    .hall .name { border-right: 0; border-bottom: 1px solid var(--line); padding: 10px 14px; }
+    .track { background: none; display: flex; flex-direction: column; gap: 8px; padding: 10px; }
+    .film { position: relative; left: auto !important; width: auto !important; top: auto; bottom: auto; }
+    .hall:nth-child(n+3) .film:nth-child(n+3) { display: none; }
+    .fgrid { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .films { padding-block: 44px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="hero"><div class="in">
+    <header class="head"><span class="logo">ПЛЁНКА</span><nav><span>Программа</span><span>Площадки</span><span>Жюри</span><span>О фестивале</span></nav><span class="tix">Билеты</span></header>
+    <div class="grid">
+      <div>
+        <h1>Плёнка<br>’23</h1>
+        <div class="when"><div><b>12–15</b>октября</div><div><b>48</b>короткометражек</div><div><b>3</b>зала в центре<br>Екатеринбурга</div></div>
+      </div>
+      <div class="frame"><img src="photos/plenka-hero.jpg" alt="Зрительный зал с красными креслами"><span>Кинотеатр «Колизей», зал 1</span></div>
+    </div>
+  </div></section>
+
+  <section class="sched"><div class="in">
+    <div class="top"><h2>Программа</h2><div class="tabs"><span>чт 12</span><span class="on">пт 13</span><span>сб 14</span><span>вс 15</span></div></div>
+    <div class="filters"><span class="on">Все жанры</span><span>Документальное</span><span>Анимация</span><span>Игровое</span><span>Встречи с авторами</span><span>Мой список: 3</span></div>
+    <div class="board">
+      <div class="times"><span></span><div class="scale">
+        <span style="left:0%;transform:none;padding-left:6px">10:00</span><span style="left:15.4%">12:00</span><span style="left:30.8%">14:00</span><span style="left:46.2%">16:00</span><span style="left:61.5%">18:00</span><span style="left:76.9%">20:00</span><span style="left:92.3%">22:00</span>
+      </div></div>
+      <div class="hall"><div class="name">Колизей, зал 1<small>220 мест</small></div><div class="track">
+        <div class="film" style="left:1%;width:13%"><b>Утро на Исети</b><span>10:00, 72 мин</span></div>
+        <div class="film mine" style="left:16%;width:14%"><b>Под мостом тихо</b><span>12:10, 18 мин + 4 фильма</span></div>
+        <div class="film talk" style="left:32%;width:11%"><b>Встреча с режиссёрами</b><span>14:20</span></div>
+        <div class="film sold" style="left:47%;width:14%"><b>Конкурс, блок 3</b><span>16:00, билетов нет</span></div>
+        <div class="film" style="left:66%;width:15%"><b>Конкурс, блок 4</b><span>18:40, 94 мин</span></div>
+        <div class="film mine" style="left:83%;width:15%"><b>Ночь анимации</b><span>21:00, 110 мин</span></div>
+      </div></div>
+      <div class="hall"><div class="name">Синема Парк<small>140 мест</small></div><div class="track">
+        <div class="film" style="left:8%;width:15%"><b>Дети уходят</b><span>11:00, 64 мин</span></div>
+        <div class="film" style="left:27%;width:16%"><b>Документальный блок</b><span>13:30, 88 мин</span></div>
+        <div class="film mine" style="left:50%;width:13%"><b>Студенческий конкурс</b><span>16:30, 70 мин</span></div>
+        <div class="film" style="left:70%;width:14%"><b>Северный ветер</b><span>19:00, 75 мин</span></div>
+      </div></div>
+      <div class="hall"><div class="name">Ельцин Центр<small>90 мест</small></div><div class="track">
+        <div class="film talk" style="left:3%;width:20%"><b>Лекция: звук в коротком метре</b><span>10:30</span></div>
+        <div class="film" style="left:38%;width:14%"><b>Ретроспектива 90-х</b><span>15:00, 80 мин</span></div>
+        <div class="film" style="left:62%;width:20%"><b>Открытый микрофон авторов</b><span>18:00</span></div>
+      </div></div>
+    </div>
+  </div></section>
+
+  <section class="films"><div class="in">
+    <h2>В конкурсе</h2>
+    <div class="fgrid">
+      <article class="poster"><img src="photos/plenka-f1.jpg" alt=""><h3>Под мостом тихо</h3><p>Игровое, 18 мин. Пермь</p></article>
+      <article class="poster"><img src="photos/plenka-f2.jpg" alt=""><h3>Северный ветер</h3><p>Документальное, 26 мин. Мурманск</p></article>
+      <article class="poster"><img src="photos/plenka-f3.jpg" alt=""><h3>Дети уходят</h3><p>Игровое, 22 мин. Екатеринбург</p></article>
+      <article class="poster"><img src="photos/plenka-f4.jpg" alt=""><h3>Утро на Исети</h3><p>Документальное, 14 мин. Екатеринбург</p></article>
+    </div>
+  </div></section>
+
+  <footer class="foot">Фестиваль короткого метра «Плёнка», Екатеринбург, 12–15 октября 2023</footer>
+</div>
+<script src="live.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ковалёв, постоянная экспозиция</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Forum&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Музейный зал: стены цвета петроль, паркет, работы в паспарту под софитами, этикетки рядом с каждой. Ходим вправо */
+  :root {
+    --wall: #2d3a38;
+    --wall-dark: #1f2827;
+    --floor: #6a4a31;
+    --mat: #f5f3ee;
+    --label: #fbfaf7;
+    --ink: #1d1f1e;
+    --light: #f3e7c9;
+    --soft: #9fb0ab;
+    --disp: "Forum", "Times New Roman", serif;
+    --text: "Golos Text", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--wall-dark); color: var(--mat); font: 400 16px/1.5 var(--text); overflow: hidden; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--light); outline-offset: 4px; }
+
+  .hall { position: fixed; inset: 0; overflow: hidden; }
+  .track { display: flex; height: 100%; width: max-content; will-change: transform; }
+  .wall { position: relative; height: 100%; flex: none; background: var(--wall); }
+  .wall::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14vh; background:
+      linear-gradient(180deg, #3b2a1d 0 6px, transparent 6px),
+      repeating-linear-gradient(90deg, var(--floor) 0 140px, #5d4029 140px 142px, #74523a 142px 280px, #5d4029 280px 282px); }
+  .wall::before { content: ""; position: absolute; left: 0; right: 0; bottom: 14vh; height: 18px; background: #26302f; }
+  .door { width: 70px; }
+
+  .entrance { width: 100vw; display: flex; flex-direction: column; justify-content: center; padding: 0 10vw 14vh; }
+  .entrance .museum { font: 400 18px var(--text); color: var(--soft); letter-spacing: .02em; }
+  .entrance h1 { font: 400 clamp(60px, 9vw, 150px)/.95 var(--disp); color: var(--light); margin: 14px 0 24px; }
+  .entrance p { max-width: 44ch; font-size: 19px; color: #d7dfdc; }
+  .entrance .go { margin-top: 40px; display: flex; gap: 14px; align-items: center; color: var(--soft); }
+  .entrance .go span { width: 60px; height: 1px; background: var(--soft); }
+
+  .room-title { position: absolute; top: 8vh; left: 8vw; font: 400 32px var(--disp); color: var(--light); }
+  .room-title small { display: block; font: 400 14px var(--text); color: var(--soft); }
+
+  .room { display: flex; align-items: flex-start; gap: 11vw; padding: 21vh 10vw 0 8vw; }
+  .piece { position: relative; display: flex; align-items: flex-end; gap: 34px; flex: none; }
+  .piece + .piece { margin-top: 5vh; }
+  .spot { position: absolute; left: 50%; top: -20vh; width: 160%; height: 115%; transform: translateX(-50%); pointer-events: none;
+    background: radial-gradient(ellipse 50% 60% at 50% 30%, rgba(243, 231, 201, .22), rgba(243, 231, 201, 0) 70%);
+    opacity: 0; transition: opacity 1.4s ease; }
+  .lit .spot { opacity: 1; }
+  .lamp { position: absolute; left: 50%; top: -20vh; width: 54px; height: 18px; transform: translateX(-50%); background: #151b1a; border-radius: 0 0 26px 26px; }
+  .frame { position: relative; background: #121514; padding: 10px; box-shadow: 0 30px 40px -20px rgba(0,0,0,.7); cursor: pointer; transition: transform .3s; }
+  .frame:hover { transform: translateY(-4px); }
+  .frame .passe { background: var(--mat); padding: 34px; }
+  .frame img { height: 46vh; width: auto; max-width: none; }
+  .frame.small img { height: 38vh; }
+  .placard { width: 240px; background: var(--label); color: var(--ink); padding: 16px 18px 18px; margin-bottom: 4vh; box-shadow: 0 8px 16px -8px rgba(0,0,0,.6); }
+  .placard h2 { font: 400 26px/1.05 var(--disp); }
+  .placard .by { font-size: 13px; color: #6d716f; margin: 4px 0 10px; }
+  .placard p { font-size: 14px; line-height: 1.45; }
+  .placard .tech { font-size: 13px; color: #6d716f; margin-top: 8px; font-style: italic; }
+  .placard button { margin-top: 12px; font-size: 14px; font-weight: 600; border-bottom: 1.5px solid var(--ink); }
+
+  .text-wall { width: 72vw; padding: 18vh 8vw 18vh; }
+  .text-wall h2 { font: 400 54px/1 var(--disp); color: var(--light); margin-bottom: 30px; }
+  .text-wall .cols { columns: 2; column-gap: 50px; font-size: 18px; color: #d7dfdc; }
+  .text-wall .cols p { margin-bottom: 1em; break-inside: avoid; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 30px; margin-top: 30px; list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; border-top: 1px solid #4b5a57; padding-top: 10px; font-size: 15px; color: #c2ccc9; }
+  .steps li::before { content: counter(s, upper-roman) ". "; font: 400 22px var(--disp); color: var(--light); }
+  .steps b { color: var(--light); font-weight: 500; }
+
+  .shop { width: 90vw; padding: 16vh 8vw; }
+  .shop h2 { font: 400 54px/1 var(--disp); color: var(--light); }
+  .shop > p { color: var(--soft); margin: 10px 0 34px; }
+  .shelf { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .tag { background: var(--label); color: var(--ink); padding: 20px; }
+  .tag b { display: block; font: 400 26px var(--disp); }
+  .tag .pr { font-size: 22px; font-weight: 600; margin: 10px 0 4px; }
+  .tag p { font-size: 14px; color: #5c605e; }
+  .guest { margin-top: 40px; display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
+  .guest .book { background: #6b1f24; color: var(--light); padding: 24px 30px; box-shadow: 0 20px 30px -16px rgba(0,0,0,.8); }
+  .guest .book small { display: block; color: #e2b9b9; font-size: 13px; }
+  .guest .book b { font: 400 34px var(--disp); }
+  .guest button { border-bottom: 1px solid var(--soft); color: var(--soft); }
+
+  .hud { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center; padding: 14px max(16px, 3vw); color: var(--soft); font-size: 14px; pointer-events: none; }
+  .hud .bar { flex: 1; height: 2px; background: rgba(255,255,255,.1); margin: 0 24px; }
+  .hud .bar i { display: block; height: 100%; width: 0; background: var(--light); }
+  .hud nav { pointer-events: auto; display: flex; gap: 6px; }
+  .hud nav button { border: 1px solid #4b5a57; border-radius: 30px; padding: 4px 12px; font-size: 13px; color: #d7dfdc; background: rgba(20,26,25,.6); }
+
+  /* аудиогид */
+  .guide { overscroll-behavior: contain; position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 100%); z-index: 20; background: #141a19; color: #e7ecea; overflow-y: auto; transform: translateX(100%); transition: transform .5s cubic-bezier(.7,0,.2,1); visibility: hidden; }
+  .guide.open { transform: none; visibility: visible; }
+  .guide .in { padding: 40px 44px 60px; }
+  .guide .close { position: sticky; top: 0; float: right; border: 1px solid #4b5a57; border-radius: 30px; padding: 6px 14px; background: #141a19; }
+  .guide .num { color: var(--soft); font-size: 14px; }
+  .guide h2 { font: 400 64px/1 var(--disp); color: var(--light); margin: 10px 0 18px; }
+  .guide .lead { font-size: 21px; line-height: 1.45; }
+  .guide h3 { font: 400 26px var(--disp); color: var(--light); margin: 34px 0 10px; }
+  .guide ol { padding-left: 20px; color: #c9d2cf; }
+  .guide ol li { margin-bottom: 10px; }
+  .guide .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .guide .nums b { display: block; font: 400 40px/1 var(--disp); color: var(--light); }
+  .guide .nums span { color: var(--soft); font-size: 14px; }
+  .guide .pics { display: grid; grid-template-columns: 2.4fr 1fr; gap: 14px; margin-top: 34px; align-items: start; }
+  .guide .pics div { height: 60vh; overflow-y: auto; background: #fff; }
+  .guide .pics .ph { border-radius: 22px; border: 6px solid #000; max-height: 560px; scrollbar-width: none; }
+  .guide blockquote { font: 400 30px/1.2 var(--disp); color: var(--light); margin-top: 34px; }
+  .guide cite { display: block; font: 400 15px var(--text); color: var(--soft); margin-top: 8px; font-style: normal; }
+  .veil { position: fixed; inset: 0; z-index: 15; background: rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .4s; }
+  .veil.on { opacity: 1; pointer-events: auto; }
+
+  @media (max-width: 860px) {
+    body { overflow: auto; }
+    .hall { position: static; }
+    .track { flex-direction: column; width: 100%; transform: none !important; }
+    .wall { width: 100% !important; height: auto; padding: 60px 16px 18vh; display: flex; flex-direction: column; gap: 50px; }
+    .door { display: none; }
+    .entrance { min-height: 90vh; padding: 0 16px 14vh; }
+    .room-title { position: static; }
+    .room { padding: 60px 16px 18vh; gap: 50px; }
+    .piece + .piece { margin-top: 0; }
+    .piece { position: static; flex-direction: column; align-items: stretch; gap: 0; }
+    .spot, .lamp { display: none; }
+    .frame img, .frame.small img { height: auto; width: 100%; }
+    .frame .passe { padding: 14px; }
+    .placard { width: auto; margin: 0; }
+    .text-wall, .shop { padding: 60px 16px 18vh; }
+    .text-wall .cols { columns: 1; }
+    .steps, .shelf { grid-template-columns: 1fr; }
+    .hud { display: none; }
+    .guide .in { padding: 20px 18px 40px; }
+    .guide h2 { font-size: 44px; }
+    .guide .nums { grid-template-columns: 1fr; }
+    .guide .pics { grid-template-columns: 1fr; }
+    .guide .pics div:first-child { display: none; }
+    .guide .pics .ph { width: min(300px, 100%); margin: 0 auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { .spot, .guide, .veil, .frame { transition: none; } }
+</style>
+</head>
+<body>
+<div class="hall" id="hall"><div class="track" id="track"></div></div>
+<div class="hud" id="hud"><span id="where">Вход</span><span class="bar"><i id="bar"></i></span><nav aria-label="Залы"><button data-go="room1">Зал I</button><button data-go="room2">Зал II</button><button data-go="room3">Зал III</button><button data-go="author">Об авторе</button><button data-go="shop">Магазин</button></nav></div>
+<div class="veil" id="veil"></div>
+<aside class="guide" id="guide" role="dialog" aria-modal="true" aria-labelledby="g-title"><div class="in" id="g-in"></div></aside>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const by = id => P.findIndex(p => p.id === id);
+const rooms = [
+  { id: 'room1', num: 'I', title: 'Еда и отдых', items: ['opara', 'tihiy'] },
+  { id: 'room2', num: 'II', title: 'Здоровье и право', items: ['zubr', 'suharev'] },
+  { id: 'room3', num: 'III', title: 'Кино и вещи', items: ['plenka', 'sherst'] }
+];
+
+function piece(p, left, small) {
+  const i = by(p.id);
+  return `<div class="piece"><div class="frame ${small ? 'small' : ''}" data-i="${i}" tabindex="0" role="button" aria-label="Открыть рассказ о проекте ${esc(p.name)}"><span class="spot"></span><span class="lamp"></span><div class="passe"><img src="${shot(p, 'desk')}" alt="Сайт ${esc(p.name)}"></div></div>
+    <div class="placard"><h2>${esc(p.name)}</h2><p class="by">${esc(p.client)}, ${esc(p.city)}, ${p.year}</p><p>${esc(p.short)}.</p><p class="tech">${esc(p.tools)}</p><button data-i="${i}">Слушать аудиогид</button></div></div>`;
+}
+
+let html = `<section class="wall entrance" id="entrance"><p class="museum">Постоянная экспозиция</p><h1>${esc(D.name)}.<br>Шесть концептов</h1><p>Шесть работ веб-дизайнера из ${D.city === 'Нижний Новгород' ? 'Нижнего Новгорода' : esc(D.city)}. Пекарня, клиника, прокат лодок, кинофестиваль, юристы и магазин пряжи. У каждой работы есть аудиогид, то есть подробный рассказ.</p><p class="go"><span></span>Крутите колесо или листайте вправо</p></section><div class="wall door"></div>`;
+rooms.forEach(r => {
+  const [a, b] = r.items.map(id => P[by(id)]);
+  html += `<section class="wall room" id="${r.id}"><h2 class="room-title"><small>Зал ${r.num}</small>${r.title}</h2>${piece(a, 120)}${piece(b, 1110, true)}</section><div class="wall door"></div>`;
+});
+html += `<section class="wall text-wall" id="author"><h2>Об авторе</h2><div class="cols">${D.about.map(t => `<p>${esc(t)}</p>`).join('')}<p>Работает в ${D.tools.join(', ')}.</p></div><ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ol></section><div class="wall door"></div>`;
+html += `<section class="wall shop" id="shop"><h2>Музейный магазин</h2><p>Здесь можно заказать такую же работу для себя. Свободное окно: ${esc(D.window)}.</p><div class="shelf">${D.services.map(s => `<div class="tag"><b>${esc(s.name)}</b><p class="pr">${esc(s.price)}</p><p>${esc(s.time)}. ${esc(s.text)}</p></div>`).join('')}</div>
+  <div class="guest"><div class="book"><small>Книга отзывов и предложений</small><b id="mail">${esc(D.email)}</b><small>телеграм ${esc(D.telegram)}</small></div><button id="copy">Скопировать почту</button></div></section>`;
+$('#track').innerHTML = html;
+
+/* горизонтальная прогулка */
+const track = $('#track'), bar = $('#bar'), where = $('#where');
+const mobile = () => matchMedia('(max-width: 860px)').matches;
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let x = 0, target = 0;
+const max = () => Math.max(0, track.scrollWidth - innerWidth);
+addEventListener('wheel', e => { if (mobile() || $('#guide').classList.contains('open')) return; target = Math.min(max(), Math.max(0, target + (Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX) * 1.2)); }, { passive: true });
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeGuide();
+  if (mobile() || $('#guide').classList.contains('open')) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') target = Math.min(max(), target + innerWidth * .7);
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') target = Math.max(0, target - innerWidth * .7);
+});
+let tx = null;
+addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+addEventListener('touchmove', e => { if (mobile() || tx === null) return; const nx = e.touches[0].clientX; target = Math.min(max(), Math.max(0, target + (tx - nx) * 1.5)); tx = nx; }, { passive: true });
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => {
+  const el = document.getElementById(b.dataset.go);
+  if (mobile()) el.scrollIntoView({ behavior: 'smooth' }); else target = Math.min(max(), el.offsetLeft);
+}));
+const names = { entrance: 'Вход', room1: 'Зал I. Еда и отдых', room2: 'Зал II. Здоровье и право', room3: 'Зал III. Кино и вещи', author: 'Об авторе', shop: 'Магазин' };
+(function loop() {
+  if (!mobile()) {
+    x += (target - x) * (reduce ? 1 : .08);
+    track.style.transform = `translate3d(${-x}px,0,0)`;
+    bar.style.width = (max() ? x / max() * 100 : 0) + '%';
+    let cur = 'entrance';
+    track.querySelectorAll('section').forEach(s => { if (s.offsetLeft <= x + innerWidth / 2) cur = s.id; });
+    where.textContent = names[cur];
+    track.querySelectorAll('.frame').forEach(f => { const r = f.getBoundingClientRect(); if (r.left < innerWidth * .85 && r.right > innerWidth * .15) f.classList.add('lit'); });
+  }
+  requestAnimationFrame(loop);
+})();
+if (mobile()) track.querySelectorAll('.frame').forEach(f => f.classList.add('lit'));
+
+/* аудиогид */
+const guide = $('#guide'), veil = $('#veil');
+let lastFocus;
+function openGuide(i) {
+  const p = P[i], n = P[(i + 1) % P.length];
+  lastFocus = document.activeElement;
+  $('#g-in').innerHTML = `<button class="close" id="g-close">Закрыть</button>
+    <p class="num">Аудиогид, работа ${i + 1} из ${P.length}</p><h2 id="g-title">${esc(p.name)}</h2>
+    <p class="lead">${esc(p.problem)}</p>
+    <h3>Что сделали</h3><ol>${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ol>
+    <h3>В цифрах</h3><div class="nums">${p.result.map(([a, b]) => `<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>
+    <div class="pics"><div tabindex="0" aria-label="Вся страница"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div><div class="ph" tabindex="0" aria-label="Телефон"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div></div>
+    <blockquote>«${esc(p.quote)}»<cite>${esc(p.quoteBy)}</cite></blockquote>
+    <h3><button data-i="${(i + 1) % P.length}" style="border-bottom:1px solid">Следующая работа: ${esc(n.name)}</button></h3>`;
+  guide.scrollTop = 0; guide.classList.add('open'); veil.classList.add('on');
+  $('#g-close').focus();
+}
+function closeGuide() { if (!guide.classList.contains('open')) return; guide.classList.remove('open'); veil.classList.remove('on'); lastFocus && lastFocus.focus(); }
+document.addEventListener('click', e => {
+  if (e.target.id === 'g-close' || e.target === veil) return closeGuide();
+  const t = e.target.closest('[data-i]'); if (t) openGuide(+t.dataset.i);
+});
+document.addEventListener('keydown', e => { const t = e.target.closest('.frame'); if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openGuide(+t.dataset.i); } });
+$('#copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено, Ctrl+C'; }
+  setTimeout(() => e.target.textContent = 'Скопировать почту', 2200);
+});
+</script>
+</body>
+</html>

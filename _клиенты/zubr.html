@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Клиника Зубр</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script>if (location.search.includes('m')) document.documentElement.classList.add('m')</script>
+<style>
+  /* Лесная клиника: тёмно-зелёный вместо больничного синего, запись как главный герой страницы */
+  :root {
+    --forest: #0f3a2f;
+    --moss: #2c6a53;
+    --mint: #e9f0eb;
+    --bone: #fbfbf8;
+    --ink: #13201b;
+    --muted: #5a6d64;
+    --amber: #f0b54a;
+    --line: #d6e0d9;
+    --f: "Geologica", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html.m body { width: 390px; }
+  body { background: var(--bone); color: var(--ink); font: 400 17px/1.5 var(--f); }
+  img { display: block; max-width: 100%; }
+  .page { container-type: inline-size; }
+  .in { max-width: 1320px; margin: 0 auto; padding-inline: 40px; }
+
+  .head .in { display: flex; align-items: center; gap: 36px; padding-block: 24px; }
+  .logo { display: flex; align-items: center; gap: 10px; font: 700 24px var(--f); color: var(--forest); }
+  .logo svg { width: 38px; height: 38px; }
+  .nav { display: flex; gap: 28px; color: var(--muted); }
+  .phone { margin-left: auto; font-weight: 500; }
+  .btn { background: var(--forest); color: #fff; border: 0; border-radius: 12px; padding: 14px 22px; font: 500 16px var(--f); }
+
+  .hero .in { display: grid; grid-template-columns: 1fr 640px; gap: 60px; padding-block: 40px 90px; align-items: start; }
+  .hero h1 { font: 500 64px/1.02 var(--f); letter-spacing: -.03em; color: var(--forest); text-wrap: balance; margin-top: 40px; }
+  .hero .lead { font-size: 20px; color: var(--muted); max-width: 32ch; margin-top: 24px; }
+  .facts { display: flex; gap: 40px; margin-top: 56px; }
+  .facts b { display: block; font: 500 34px var(--f); color: var(--forest); letter-spacing: -.02em; }
+  .facts span { color: var(--muted); font-size: 15px; }
+
+  .book { background: #fff; border: 1px solid var(--line); border-radius: 24px; padding: 28px; box-shadow: 0 40px 80px -40px rgba(15, 58, 47, .35); }
+  .stepper { display: flex; gap: 8px; margin-bottom: 26px; }
+  .stepper div { flex: 1; font-size: 14px; color: var(--muted); }
+  .stepper div::before { content: ""; display: block; height: 4px; border-radius: 4px; background: var(--line); margin-bottom: 8px; }
+  .stepper .done::before, .stepper .now::before { background: var(--forest); }
+  .stepper .now { color: var(--ink); font-weight: 500; }
+  .doc { display: flex; gap: 14px; align-items: center; padding: 14px; background: var(--mint); border-radius: 16px; }
+  .doc .ava { width: 56px; height: 56px; border-radius: 50%; background: var(--forest); color: #fff; display: grid; place-items: center; font-weight: 500; font-size: 19px; flex: none; }
+  .doc b { font-weight: 500; display: block; }
+  .doc span { font-size: 14px; color: var(--muted); }
+  .doc em { margin-left: auto; font-style: normal; font-size: 14px; color: var(--moss); font-weight: 500; }
+  .book h3 { font: 500 18px var(--f); margin: 24px 0 12px; }
+  .days { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .days div { border: 1px solid var(--line); border-radius: 12px; text-align: center; padding: 8px 0; font-size: 14px; color: var(--muted); }
+  .days div b { display: block; font-size: 20px; color: var(--ink); font-weight: 500; }
+  .days .on { background: var(--forest); border-color: var(--forest); color: #cfe3d9; }
+  .days .on b { color: #fff; }
+  .slots { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .slots span { border: 1px solid var(--line); border-radius: 10px; text-align: center; padding: 10px 0; font-weight: 500; }
+  .slots .off { color: #b8c4bd; text-decoration: line-through; border-style: dashed; }
+  .slots .on { background: var(--amber); border-color: var(--amber); }
+  .price { display: flex; justify-content: space-between; gap: 20px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); align-items: center; }
+  .price p { font-size: 14px; color: var(--muted); max-width: 30ch; }
+  .price b { font: 500 26px var(--f); white-space: nowrap; }
+  .book .btn { width: 100%; margin-top: 18px; padding: 18px; font-size: 17px; }
+
+  .sec { padding-block: 90px; }
+  .sec h2 { font: 500 44px/1.05 var(--f); letter-spacing: -.02em; color: var(--forest); margin-bottom: 36px; }
+  .docs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 20px; }
+  .card { position: relative; }
+  .card .room { position: absolute; left: 14px; top: 14px; background: rgba(255,255,255,.92); border-radius: 30px; padding: 4px 12px; font-size: 13px; font-weight: 500; }
+  .card h3 { font: 500 21px var(--f); margin-top: 16px; }
+  .card p { color: var(--muted); font-size: 15px; }
+  .card .slot { display: inline-block; margin-top: 12px; background: var(--mint); color: var(--forest); border-radius: 30px; padding: 6px 14px; font-size: 14px; font-weight: 500; }
+
+  .prices { background: var(--forest); color: #e6efe9; }
+  .prices h2 { color: #fff; }
+  .prices .in { display: grid; grid-template-columns: 1fr 1.3fr; gap: 60px; }
+  .prices p.side { color: #a9c4b7; max-width: 34ch; }
+  .tbl div { display: flex; justify-content: space-between; gap: 20px; padding: 16px 0; border-bottom: 1px solid #2d5a4b; font-size: 18px; }
+  .tbl b { font-weight: 500; color: #fff; white-space: nowrap; }
+
+  .where .in { display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; align-items: center; }
+  .where img { border-radius: 24px; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+  .where p { color: var(--muted); margin-top: 12px; }
+  .foot { border-top: 1px solid var(--line); padding: 30px 40px; color: var(--muted); font-size: 14px; text-align: center; }
+
+  @container (max-width: 600px) {
+    .in { padding-inline: 18px; }
+    .nav, .phone { display: none; }
+    .head .in { justify-content: space-between; padding-block: 16px; }
+    .head .btn { padding: 10px 14px; font-size: 14px; }
+    .hero .in { grid-template-columns: 1fr; gap: 26px; padding-block: 8px 50px; }
+    .hero h1 { font-size: 36px; margin-top: 10px; }
+    .hero .lead { font-size: 17px; margin-top: 12px; }
+    .facts { display: none; }
+    .book { padding: 18px; border-radius: 20px; }
+    .days { grid-template-columns: repeat(4, 1fr); }
+    .days div:nth-child(n+5) { display: none; }
+    .slots { grid-template-columns: repeat(3, 1fr); }
+    .slots span:nth-child(n+10) { display: none; }
+    .doc em { display: none; }
+    .price { flex-direction: column; align-items: start; gap: 6px; }
+    .sec { padding-block: 50px; }
+    .sec h2 { font-size: 30px; margin-bottom: 22px; }
+    .docs, .prices .in, .where .in { grid-template-columns: 1fr; gap: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="head"><div class="in">
+    <div class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30c0-10 6-18 14-18s14 8 14 18c-3 0-5-3-7-3s-4 3-7 3-5-3-7-3-4 3-7 3z" fill="#0f3a2f"/><path d="M10 14c-2-3-2-7 1-9M30 14c2-3 2-7-1-9" stroke="#0f3a2f" stroke-width="3" fill="none" stroke-linecap="round"/></svg>Зубр</div>
+    <nav class="nav"><span>Врачи</span><span>Цены</span><span>Лечение</span><span>Адрес</span></nav>
+    <span class="phone">+7 4822 77-00-12</span>
+    <button class="btn">Записаться</button>
+  </div></header>
+
+  <section class="hero"><div class="in">
+    <div>
+      <h1>Запись к стоматологу в Твери за три шага</h1>
+      <p class="lead">Выберите врача и время. Администратор перезвонит, только если что-то поменяется.</p>
+      <div class="facts"><div><b>1 500 ₽</b><span>первый приём<br>с планом лечения</span></div><div><b>8 врачей</b><span>принимают<br>без выходных</span></div><div><b>с 2009</b><span>на Советской, 44</span></div></div>
+    </div>
+    <div class="book">
+      <div class="stepper"><div class="done">Врач</div><div class="now">Время</div><div>Телефон</div></div>
+      <div class="doc"><span class="ava">ИС</span><div><b>Ирина Сомова</b><span>терапевт, 14 лет практики</span></div><em>Сменить</em></div>
+      <h3>Октябрь</h3>
+      <div class="days"><div>пн<b>27</b></div><div class="on">вт<b>28</b></div><div>ср<b>29</b></div><div>чт<b>30</b></div><div>пт<b>31</b></div><div>сб<b>1</b></div></div>
+      <h3>Свободное время во вторник</h3>
+      <div class="slots"><span class="off">9:00</span><span>9:40</span><span class="off">10:20</span><span class="on">11:00</span><span>11:40</span><span class="off">13:00</span><span>13:40</span><span>15:00</span><span class="off">15:40</span><span>16:20</span></div>
+      <div class="price"><p>Осмотр, снимок и план лечения с ценами. Приём длится 40 минут.</p><b>1 500 ₽</b></div>
+      <button class="btn">Дальше: ваш телефон</button>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="in">
+    <h2>Врачи и их кабинеты</h2>
+    <div class="docs">
+      <article class="card"><span class="room">Кабинет 1</span><img src="photos/zubr-doc1.jpg" alt="Кабинет терапевта"><h3>Ирина Сомова</h3><p>Терапевт. Лечит кариес и каналы под микроскопом.</p><span class="slot">Ближайшее: вт, 11:00</span></article>
+      <article class="card"><span class="room">Кабинет 3</span><img src="photos/zubr-doc2.jpg" alt="Хирургический кабинет"><h3>Павел Гуров</h3><p>Хирург, имплантация. Принимает по вечерам.</p><span class="slot">Ближайшее: ср, 18:20</span></article>
+      <article class="card"><span class="room">Детский кабинет</span><img src="photos/zubr-doc3.jpg" alt="Детский кабинет"><h3>Анна Лапина</h3><p>Детский стоматолог. Первый визит без лечения, просто знакомство.</p><span class="slot">Ближайшее: чт, 10:00</span></article>
+    </div>
+  </div></section>
+
+  <section class="sec prices"><div class="in">
+    <div><h2>Цены</h2><p class="side">Точную сумму врач называет на первом приёме и записывает в план. Если по ходу лечения цена меняется, сначала спрашиваем вас.</p></div>
+    <div class="tbl">
+      <div><span>Первый приём с планом лечения</span><b>1 500 ₽</b></div>
+      <div><span>Лечение кариеса, пломба</span><b>от 4 800 ₽</b></div>
+      <div><span>Профессиональная чистка</span><b>5 200 ₽</b></div>
+      <div><span>Лечение канала под микроскопом</span><b>от 9 500 ₽</b></div>
+      <div><span>Имплант с коронкой</span><b>от 58 000 ₽</b></div>
+    </div>
+  </div></section>
+
+  <section class="sec where"><div class="in">
+    <img src="photos/zubr-room.jpg" alt="Кабинет клиники">
+    <div><h2>Советская, 44</h2><p>Вход со двора, второй этаж, есть лифт. Парковка у дома бесплатная.</p><p>Каждый день с 8:00 до 21:00.</p></div>
+  </div></section>
+
+  <footer class="foot">Стоматология «Зубр», Тверь. Лицензия ЛО-69-01-002345</footer>
+</div>
+<script src="live.js"></script>
+</body>
+</html>

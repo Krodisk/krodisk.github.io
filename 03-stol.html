@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стол Дениса Ковалёва</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=PT+Mono&display=swap" rel="stylesheet">
+<style>
+  /* Режущий коврик дизайнера: зелёное поле с сантиметровой сеткой, на нём распечатки сайтов, стикеры, чек с ценами и визитка */
+  :root {
+    --mat: #2c5b4c;
+    --mat-line: rgba(233, 220, 140, .22);
+    --mat-line-strong: rgba(233, 220, 140, .45);
+    --paper: #fbfbf8;
+    --ink: #1c1e1d;
+    --soft: #5d625f;
+    --sticky: #ffe680;
+    --pencil: #e3a92a;
+    --hand: "Shantell Sans", "Comic Sans MS", cursive;
+    --print: "IBM Plex Sans", "Segoe UI", sans-serif;
+    --mono: "PT Mono", "Courier New", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--mat); color: var(--ink); font: 400 16px/1.5 var(--print); overflow-x: hidden; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--sticky); outline-offset: 3px; }
+
+  .desk {
+    position: relative; min-height: 2050px;
+    background-color: var(--mat);
+    background-image:
+      linear-gradient(var(--mat-line-strong) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mat-line-strong) 1px, transparent 1px),
+      linear-gradient(var(--mat-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mat-line) 1px, transparent 1px);
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+    background-position: 30px 30px;
+    overflow: hidden;
+  }
+  .ruler-x, .ruler-y { position: absolute; color: rgba(233, 220, 140, .7); font: 11px var(--mono); pointer-events: none; }
+  .ruler-x { top: 8px; left: 30px; right: 0; height: 14px; }
+  .ruler-y { left: 6px; top: 30px; bottom: 0; width: 20px; }
+  .ruler-x span, .ruler-y span { position: absolute; }
+  .diag { position: absolute; right: -200px; bottom: -200px; width: 900px; height: 900px; pointer-events: none;
+    background: repeating-linear-gradient(45deg, transparent 0 199px, var(--mat-line) 199px 200px); opacity: .7; }
+
+  .item { position: absolute; touch-action: none; user-select: none; transition: box-shadow .2s, transform .25s; }
+  .item.dragging { transition: none; z-index: 999 !important; cursor: grabbing; }
+  .draggable { cursor: grab; }
+
+  .sheet { background: var(--paper); padding: 14px 14px 46px; box-shadow: 0 2px 2px rgba(0,0,0,.18), 0 18px 30px -12px rgba(0,0,0,.45); width: 31vw; max-width: 520px; }
+  .sheet img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; pointer-events: none; }
+  .sheet .label { position: absolute; left: 16px; right: 16px; bottom: 10px; display: flex; justify-content: space-between; font: 600 18px var(--hand); }
+  .sheet .label small { font: 400 15px var(--hand); color: var(--soft); }
+  .sheet:hover { box-shadow: 0 2px 2px rgba(0,0,0,.18), 0 28px 40px -14px rgba(0,0,0,.55); }
+  .sheet .clip { position: absolute; top: -14px; left: 50%; width: 46px; height: 30px; transform: translateX(-50%); border: 4px solid #b9bfc4; border-bottom: 0; border-radius: 10px 10px 0 0; }
+
+  .card { background: var(--paper); width: 380px; padding: 26px 28px; box-shadow: 0 16px 26px -12px rgba(0,0,0,.5); background-image: linear-gradient(transparent 58px, #e6a5a5 58px, #e6a5a5 60px, transparent 60px), repeating-linear-gradient(transparent 0 27px, #cfe0ee 27px 28px); background-position: 0 0, 0 66px; }
+  .card h1 { font: 600 30px/1.1 var(--hand); }
+  .card p { font: 400 17px/28px var(--hand); margin-top: 14px; }
+  .card .hint { font: 400 14px/1.4 var(--print); color: var(--soft); margin-top: 18px; }
+  .card .tidy { margin-top: 12px; font: 600 15px var(--print); border: 1.5px solid var(--ink); border-radius: 30px; padding: 6px 14px; }
+
+  .sticky { background: var(--sticky); width: 220px; min-height: 200px; padding: 20px 18px; font: 400 18px/1.35 var(--hand); box-shadow: 0 14px 20px -12px rgba(0,0,0,.55); }
+  .sticky b { display: block; font: 600 40px/1 var(--hand); margin-bottom: 6px; }
+  .sticky.pink { background: #ffb3c7; } .sticky.blue { background: #b8e1ff; }
+
+  .note { background: var(--paper); width: 430px; padding: 34px 30px 30px 54px; box-shadow: 0 16px 26px -12px rgba(0,0,0,.5);
+    background-image: linear-gradient(90deg, transparent 40px, #e6a5a5 40px, #e6a5a5 42px, transparent 42px), repeating-linear-gradient(transparent 0 29px, #cfe0ee 29px 30px); background-position: 0 0, 0 33px; }
+  .note::before { content: ""; position: absolute; top: -10px; left: 30px; right: 30px; height: 20px; background: radial-gradient(circle at 10px 10px, #6b6f72 5px, transparent 6px) 0 0 / 26px 20px repeat-x; }
+  .note h2 { font: 600 24px/30px var(--hand); }
+  .note p { font: 400 17px/30px var(--hand); }
+  .note p + p { margin-top: 0; }
+
+  .receipt { background: #fff; width: 300px; padding: 24px 22px 34px; font: 14px/1.6 var(--mono); box-shadow: 0 14px 22px -12px rgba(0,0,0,.5);
+    -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - 10px) no-repeat, radial-gradient(circle at 6px 0, transparent 6px, #000 6.5px) bottom / 12px 10px repeat-x;
+            mask: linear-gradient(#000 0 0) top / 100% calc(100% - 10px) no-repeat, radial-gradient(circle at 6px 0, transparent 6px, #000 6.5px) bottom / 12px 10px repeat-x; }
+  .receipt h2 { font: 14px var(--mono); text-align: center; margin-bottom: 12px; }
+  .receipt .r { display: flex; justify-content: space-between; gap: 10px; }
+  .receipt .r small { color: var(--soft); }
+  .receipt hr { border: 0; border-top: 1px dashed #999; margin: 10px 0; }
+
+  .bcard { width: 360px; height: 206px; background: #1d1f1e; color: #f1f1ec; padding: 26px; box-shadow: 0 14px 22px -10px rgba(0,0,0,.6); display: flex; flex-direction: column; justify-content: space-between; }
+  .bcard b { font: 600 24px var(--print); letter-spacing: -.01em; }
+  .bcard span { color: #a8aca9; font-size: 14px; }
+  .bcard .mail { font: 500 19px var(--print); }
+  .bcard button { align-self: start; font-size: 13px; color: var(--sticky); text-decoration: underline; text-underline-offset: 3px; }
+
+  .checklist { background: var(--paper); width: 340px; padding: 24px 26px; box-shadow: 0 14px 22px -12px rgba(0,0,0,.5); }
+  .checklist h2 { font: 600 22px var(--hand); margin-bottom: 8px; }
+  .checklist li { list-style: none; font: 400 16px/1.4 var(--hand); padding: 6px 0 6px 30px; position: relative; }
+  .checklist li::before { content: ""; position: absolute; left: 0; top: 9px; width: 16px; height: 16px; border: 2px solid var(--ink); border-radius: 3px; }
+  .checklist li b { font-weight: 600; }
+
+  .pencil { width: 380px; height: 22px; pointer-events: none; }
+
+  /* кейс */
+  .shade { overscroll-behavior: contain; position: fixed; inset: 0; z-index: 2000; background: rgba(12, 28, 23, .78); display: none; overflow-y: auto; padding: 40px max(16px, 4vw); }
+  .shade.open { display: block; }
+  .doc { background: var(--paper); max-width: 1180px; margin: 0 auto; padding: 50px 56px 60px; position: relative; box-shadow: 0 40px 80px -30px rgba(0,0,0,.6); }
+  .doc .close { position: absolute; right: 18px; top: 14px; font: 600 16px var(--print); border: 1.5px solid var(--ink); border-radius: 30px; padding: 6px 14px; }
+  .doc .who { font: 400 18px var(--hand); color: var(--soft); }
+  .doc h2 { font: 600 clamp(40px, 6vw, 84px)/1 var(--print); letter-spacing: -.04em; margin: 6px 0 24px; }
+  .doc .problem { font-size: 22px; line-height: 1.4; max-width: 46ch; }
+  .doc .two { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 40px; }
+  .doc h3 { font: 600 22px var(--hand); margin-bottom: 8px; }
+  .doc ol { padding-left: 22px; }
+  .doc ol li { margin-bottom: 10px; }
+  .doc .nums { display: grid; gap: 12px; }
+  .doc .nums div { background: var(--sticky); padding: 12px 16px; font: 400 17px var(--hand); transform: rotate(-1deg); }
+  .doc .nums div:nth-child(2) { transform: rotate(1.2deg); background: #b8e1ff; }
+  .doc .nums b { font: 600 30px var(--hand); margin-right: 8px; }
+  .doc .frames { display: grid; grid-template-columns: 3fr 1fr; gap: 26px; margin-top: 44px; align-items: start; }
+  .doc .frames > div { height: 68vh; overflow-y: auto; border: 1px solid #ddd; }
+  .doc .frames .ph { border: 7px solid var(--ink); border-radius: 26px; max-height: 620px; scrollbar-width: none; }
+  .doc blockquote { margin-top: 40px; font: 600 28px/1.25 var(--hand); max-width: 30ch; }
+  .doc cite { display: block; color: var(--soft); font: 400 16px var(--print); margin-top: 6px; }
+  .doc .next { margin-top: 30px; font: 600 16px var(--print); text-decoration: underline; text-underline-offset: 4px; }
+
+  @media (max-width: 900px) {
+    .desk { min-height: 0; padding: 30px 16px 60px; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+    .item { position: relative !important; left: auto !important; top: auto !important; }
+    .sheet { width: 100%; max-width: 480px; }
+    .card, .note, .checklist, .receipt, .bcard { width: 100%; max-width: 420px; }
+    .bcard { height: auto; gap: 18px; }
+    .sticky { width: 240px; }
+    .pencil, .diag, .ruler-y, .card .tidy { display: none; }
+    .shade { padding: 0; }
+    .doc { padding: 50px 18px 40px; }
+    .doc .two, .doc .frames { grid-template-columns: 1fr; }
+    .doc .frames > div:first-child { display: none; }
+    .doc .frames .ph { width: min(300px, 100%); margin: 0 auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { .item { transition: none; } }
+</style>
+</head>
+<body>
+<div class="desk" id="desk">
+  <div class="ruler-x" id="rx" aria-hidden="true"></div>
+  <div class="ruler-y" id="ry" aria-hidden="true"></div>
+  <div class="diag" aria-hidden="true"></div>
+</div>
+
+<div class="shade" id="shade" role="dialog" aria-modal="true" aria-labelledby="doc-title"><article class="doc" id="doc"></article></div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const desk = $('#desk');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* линейки в сантиметрах: 1 см = 40 px */
+$('#rx').innerHTML = Array.from({ length: 60 }, (_, i) => `<span style="left:${i * 200 - 4}px">${i * 5}</span>`).join('');
+$('#ry').innerHTML = Array.from({ length: 12 }, (_, i) => `<span style="top:${i * 200 - 6}px">${i * 5}</span>`).join('');
+
+/* раскладка: x и y в процентах ширины и пикселях, r поворот */
+const layout = [
+  ['card', 3, 60, -1.5], ['sheet0', 36, 70, 2.5], ['sheet1', 68, 40, -3], ['sticky0', 30, 470, -6],
+  ['sheet2', 4, 600, -2], ['note', 40, 560, 1.5], ['sheet3', 66, 520, 3.5], ['sticky1', 88, 470, 7],
+  ['sheet4', 8, 1080, 2], ['receipt', 42, 1060, -4], ['sheet5', 62, 1050, -2.5], ['sticky2', 30, 1440, 4],
+  ['checklist', 5, 1520, -3], ['bcard', 52, 1560, 5], ['pencil', 66, 1830, -12]
+];
+const tidyLayout = {
+  card: [3, 60], sheet0: [36, 60], sheet1: [68, 60], sheet2: [4, 470], sheet3: [36, 470], sheet4: [68, 470], sheet5: [4, 880],
+  note: [36, 880], receipt: [70, 880], sticky0: [4, 1290], sticky1: [22, 1290], sticky2: [40, 1290], checklist: [58, 1290], bcard: [4, 1540], pencil: [70, 1650]
+};
+
+const html = {
+  card: `<div class="item card" data-k="card"><h1>${esc(D.name)}</h1><p>Делаю сайты для пекарен, клиник и прокатов. ${esc(D.city)}. Здесь шесть концептов.</p><p class="hint">Это мой рабочий стол. Листы можно двигать. Нажмите на распечатку, чтобы открыть кейс.</p><button class="tidy" id="tidy">Разложить аккуратно</button></div>`,
+  note: `<div class="item note draggable" data-k="note"><h2>Обо мне</h2>${D.about.map(t => `<p>${esc(t)}</p>`).join('')}</div>`,
+  receipt: `<div class="item receipt draggable" data-k="receipt"><h2>КОВАЛЁВ Д.<br>ВЕБ-ДИЗАЙН<br>${esc(D.city.toUpperCase())}</h2><hr>${D.services.map(s => `<div class="r"><span>${esc(s.name)}</span><span>${esc(s.price)}</span></div><div class="r"><small>${esc(s.time)}</small></div>`).join('')}<hr><div class="r"><span>Свободное окно</span><span>${esc(D.window)}</span></div><hr><p style="text-align:center">СПАСИБО ЗА ВНИМАНИЕ</p></div>`,
+  bcard: `<div class="item bcard draggable" data-k="bcard"><div><b>${esc(D.name)}</b><br><span>веб-дизайнер, ${esc(D.city)}</span></div><div><div class="mail" id="mail">${esc(D.email)}</div><span>телеграм ${esc(D.telegram)}</span></div><button id="copy">скопировать почту</button></div>`,
+  checklist: `<div class="item checklist draggable" data-k="checklist"><h2>Как работаем</h2><ul>${D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ul></div>`,
+  pencil: `<svg class="item pencil" data-k="pencil" viewBox="0 0 380 22" aria-hidden="true"><polygon points="0,11 34,1 34,21" fill="#f2d7a6"/><polygon points="0,11 12,7.5 12,14.5" fill="#333"/><rect x="34" y="1" width="300" height="20" fill="#e3a92a"/><rect x="34" y="1" width="300" height="6" fill="#efc160"/><rect x="334" y="1" width="16" height="20" fill="#b8b8b8"/><rect x="350" y="1" width="30" height="20" rx="4" fill="#e88e9a"/></svg>`
+};
+const stickies = [
+  [P[0].result[0][0], P[0].result[0][1] + ' в «Опаре»', ''],
+  [P[1].result[0][0], P[1].result[0][1] + ' в «Зубре»', 'pink'],
+  [P[2].result[0][0], P[2].result[0][1] + ', «Тихий ход»', 'blue']
+];
+stickies.forEach(([a, b, c], i) => html['sticky' + i] = `<div class="item sticky draggable ${c}" data-k="sticky${i}"><b>${esc(a)}</b>${esc(b)}</div>`);
+P.forEach((p, i) => html['sheet' + i] = `<div class="item sheet draggable" data-k="sheet${i}" data-p="${i}" tabindex="0" role="button" aria-label="Открыть кейс ${esc(p.name)}"><span class="clip" aria-hidden="true"></span><img src="${shot(p, 'desk')}" alt="Сайт ${esc(p.name)}" loading="lazy"><span class="label">${esc(p.name)}<small>${esc(p.client.toLowerCase())}, концепт</small></span></div>`);
+
+let z = 10;
+layout.forEach(([k, x, y, r]) => {
+  desk.insertAdjacentHTML('beforeend', html[k]);
+  const el = desk.lastElementChild;
+  el.style.left = x + '%'; el.style.top = y + 'px';
+  el.style.transform = `rotate(${r}deg)`; el.dataset.r = r;
+  el.style.zIndex = z++;
+});
+
+/* перетаскивание */
+const mobile = () => matchMedia('(max-width: 900px)').matches;
+desk.addEventListener('pointerdown', e => {
+  const el = e.target.closest('.draggable');
+  if (!el || mobile() || e.button !== 0 || e.target.closest('button')) return;
+  const sx = e.clientX, sy = e.clientY, ox = el.offsetLeft, oy = el.offsetTop;
+  let moved = false;
+  el.setPointerCapture(e.pointerId);
+  el.style.zIndex = ++z;
+  const move = m => {
+    const dx = m.clientX - sx, dy = m.clientY - sy;
+    if (!moved && Math.hypot(dx, dy) < 5) return;
+    moved = true; el.classList.add('dragging');
+    el.style.left = (ox + dx) / desk.clientWidth * 100 + '%';
+    el.style.top = Math.max(0, oy + dy) + 'px';
+    el.style.transform = `rotate(${el.dataset.r * .3}deg) scale(1.02)`;
+  };
+  const up = () => {
+    el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up);
+    el.classList.remove('dragging');
+    el.style.transform = `rotate(${el.dataset.r}deg)`;
+    if (!moved && el.dataset.p) openCase(+el.dataset.p);
+  };
+  el.addEventListener('pointermove', move); el.addEventListener('pointerup', up);
+});
+desk.addEventListener('click', e => { const s = e.target.closest('.sheet'); if (s && mobile()) openCase(+s.dataset.p); });
+desk.addEventListener('keydown', e => { const s = e.target.closest('.sheet'); if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openCase(+s.dataset.p); } });
+
+$('#tidy').addEventListener('click', () => {
+  desk.querySelectorAll('.item').forEach(el => {
+    const t = tidyLayout[el.dataset.k]; if (!t) return;
+    el.style.transition = 'left .6s, top .6s, transform .6s';
+    el.style.left = t[0] + '%'; el.style.top = t[1] + 'px'; el.style.transform = 'rotate(0deg)'; el.dataset.r = 0;
+    setTimeout(() => el.style.transition = '', 650);
+  });
+});
+$('#copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'выделено, Ctrl+C'; }
+  setTimeout(() => e.target.textContent = 'скопировать почту', 2200);
+});
+
+/* кейс */
+const shade = $('#shade'), doc = $('#doc');
+let lastFocus;
+function openCase(i) {
+  const p = P[i], n = P[(i + 1) % P.length];
+  lastFocus = document.activeElement;
+  doc.innerHTML = `<button class="close" id="close">Закрыть</button>
+    <p class="who">${esc(p.client)}, ${esc(p.city)}, ${p.year}. ${esc(p.kind)}</p>
+    <h2 id="doc-title">${esc(p.name)}</h2>
+    <p class="problem">${esc(p.problem)}</p>
+    <div class="two"><div><h3>Что сделали</h3><ol>${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ol></div>
+      <div><h3>В цифрах</h3><div class="nums">${p.result.map(([a, b]) => `<div><b>${esc(a)}</b>${esc(b)}</div>`).join('')}</div></div></div>
+    <div class="frames"><div tabindex="0" aria-label="Вся страница"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div><div class="ph" tabindex="0" aria-label="Телефон"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div></div>
+    <blockquote>«${esc(p.quote)}»<cite>${esc(p.quoteBy)}</cite></blockquote>
+    <button class="next" data-n="${(i + 1) % P.length}">Следующая распечатка: ${esc(n.name)}</button>`;
+  shade.classList.add('open'); shade.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  $('#close').focus();
+}
+function closeCase() { shade.classList.remove('open'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }
+shade.addEventListener('click', e => {
+  if (e.target === shade || e.target.id === 'close') closeCase();
+  const n = e.target.closest('[data-n]'); if (n) openCase(+n.dataset.n);
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && shade.classList.contains('open')) closeCase(); });
+</script>
+</body>
+</html>

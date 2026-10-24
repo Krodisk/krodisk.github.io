@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ковалёв, плакаты</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Плакаты двадцатых: газетная бумага, красный и чёрный, работы напечатаны в два цвета и вписаны в круги и клинья */
+  :root {
+    --paper: #e9e2d0;
+    --red: #c8261b;
+    --black: #000000;
+    --grey: #4d4a44;
+    --disp: "Oswald", "Arial Narrow", sans-serif;
+    --text: "PT Sans Narrow", "Arial Narrow", sans-serif;
+    --side: max(16px, 4vw);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--black); font: 400 19px/1.45 var(--text); overflow-x: clip; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .d { font-family: var(--disp); text-transform: uppercase; font-weight: 700; letter-spacing: .01em; }
+
+  /* печать в два цвета */
+  .duo { position: relative; background: var(--red); overflow: hidden; }
+  .duo img { width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(1) contrast(1.35) brightness(1.05); mix-blend-mode: multiply; transition: filter .5s, mix-blend-mode .5s; }
+  .duo.black { background: #6e6e6e; }
+  .duo:hover img, .duo:focus-within img { filter: none; mix-blend-mode: normal; }
+
+  nav.top { position: fixed; top: 16px; right: var(--side); z-index: 20; display: flex; gap: 6px; }
+  nav.top a { font: 500 15px var(--disp); text-transform: uppercase; text-decoration: none; background: var(--black); color: var(--paper); padding: 4px 12px; }
+  nav.top a:hover { background: var(--red); }
+
+  .hero { position: relative; min-height: 100vh; padding: 0 var(--side); overflow: hidden; }
+  .hero .vname { position: absolute; left: var(--side); top: 6vh; writing-mode: vertical-rl; transform: rotate(180deg); font-size: clamp(64px, 11.5vh, 130px); line-height: .85; color: var(--black); }
+  .hero .circle { position: absolute; right: 7vw; top: 9vh; width: min(62vh, 50vw); aspect-ratio: 1; border-radius: 50%; }
+  .hero .band { position: absolute; left: -10vw; right: 26vw; top: 64vh; background: var(--black); color: var(--paper); transform: rotate(-11deg); transform-origin: left; padding: 18px 0 18px 30vw; font-size: clamp(30px, 4.4vw, 70px); line-height: 1; }
+  .hero .first { position: absolute; left: calc(var(--side) + 15vh); top: 8vh; font-size: clamp(34px, 5vw, 76px); line-height: .95; color: var(--red); }
+  .hero .facts { position: absolute; left: calc(var(--side) + 15vh); bottom: 7vh; max-width: 360px; border-top: 6px solid var(--black); padding-top: 10px; font-size: 20px; }
+  .hero .go { position: absolute; right: 9vw; bottom: 8vh; display: flex; align-items: center; gap: 0; text-decoration: none; }
+  .hero .go span { background: var(--red); color: var(--paper); font-size: 26px; padding: 10px 18px; }
+  .hero .go i { width: 0; height: 0; border-top: 30px solid transparent; border-bottom: 30px solid transparent; border-left: 46px solid var(--red); }
+
+  .poster { position: relative; padding: 14vh var(--side); border-top: 10px solid var(--black); display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: center; overflow: hidden; }
+  .poster .n { position: absolute; right: var(--side); top: 3vh; font-size: 160px; line-height: 1; color: var(--red); opacity: .9; }
+  .poster h2 { font-size: clamp(54px, 9vw, 150px); line-height: .86; }
+  .poster .what { font-size: 22px; max-width: 30ch; }
+  .poster .what b { font-family: var(--disp); font-weight: 500; text-transform: uppercase; display: block; font-size: 16px; color: var(--red); margin-bottom: 6px; }
+  .rd { display: inline-flex; margin-top: 22px; font: 700 20px var(--disp); text-transform: uppercase; background: var(--black); color: var(--paper); padding: 10px 18px; }
+  .rd:hover { background: var(--red); }
+  /* варианты композиции */
+  .v1 .duo { grid-column: 6 / 13; aspect-ratio: 1; border-radius: 50%; }
+  .v1 .txt { grid-column: 1 / 6; grid-row: 1; }
+  .v2 .duo { grid-column: 1 / 9; aspect-ratio: 16 / 10; clip-path: polygon(0 8%, 100% 0, 100% 92%, 0 100%); }
+  .v2 .txt { grid-column: 9 / 13; }
+  .v2 h2 { color: var(--red); }
+  .v3 .duo { grid-column: 3 / 13; aspect-ratio: 16 / 9; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .v3 .txt { grid-column: 1 / 7; grid-row: 2; }
+  .v3 h2 { color: var(--black); }
+  .v4 .duo { grid-column: 5 / 12; aspect-ratio: 4 / 3; transform: rotate(-6deg); box-shadow: 18px 18px 0 var(--black); }
+  .v4 .txt { grid-column: 1 / 5; grid-row: 1; }
+  .v5 .duo { grid-column: 1 / 7; aspect-ratio: 1; border-radius: 50%; }
+  .v5 .duo + .duo { grid-column: 7 / 10; aspect-ratio: 9 / 19; border-radius: 0; align-self: end; }
+  .v5 .txt { grid-column: 10 / 13; }
+  .v6 .duo { grid-column: 1 / 13; aspect-ratio: 21 / 8; clip-path: polygon(0 20%, 100% 0, 100% 80%, 0 100%); }
+  .v6 .txt { grid-column: 4 / 11; text-align: center; }
+  .v6 .what { margin: 0 auto; }
+
+  .theses { background: var(--red); color: var(--paper); padding: 14vh var(--side); }
+  .theses h2 { font-size: clamp(54px, 9vw, 150px); line-height: .86; color: var(--black); }
+  .theses .grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; margin-top: 50px; }
+  .theses .about p { font-size: 22px; }
+  .theses .about p + p { margin-top: .8em; }
+  .theses ol { list-style: none; counter-reset: t; }
+  .theses li { counter-increment: t; border-top: 3px solid var(--black); padding: 12px 0 12px 64px; position: relative; font-size: 19px; }
+  .theses li::before { content: counter(t); position: absolute; left: 0; top: 4px; font: 700 44px/1 var(--disp); color: var(--black); }
+  .theses li b { font-family: var(--disp); text-transform: uppercase; font-weight: 500; }
+
+  .rates { padding: 14vh var(--side); }
+  .rates h2 { font-size: clamp(54px, 9vw, 150px); line-height: .86; }
+  .rates table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 21px; }
+  .rates td { border-top: 4px solid var(--black); padding: 16px 12px 16px 0; vertical-align: top; }
+  .rates td:first-child { font: 700 30px var(--disp); text-transform: uppercase; width: 30%; }
+  .rates td:nth-child(3) { font: 700 30px var(--disp); white-space: nowrap; color: var(--red); }
+  .rates .wrap { overflow-x: auto; }
+
+  .call { background: var(--black); color: var(--paper); padding: 16vh var(--side); position: relative; overflow: hidden; }
+  .call .mega { position: absolute; right: -6vw; top: 50%; width: 46vw; height: 46vw; background: var(--red); clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%); transform: translateY(-50%); }
+  .call p.d { font-size: clamp(40px, 6vw, 96px); line-height: .9; position: relative; }
+  .call .mail { position: relative; display: inline-block; margin-top: 40px; font: 700 clamp(26px, 4vw, 60px) var(--disp); background: var(--paper); color: var(--black); padding: 8px 20px; }
+  .call .sub { position: relative; margin-top: 20px; font-size: 21px; display: flex; gap: 24px; flex-wrap: wrap; align-items: center; }
+  .call .sub button { color: var(--paper); border-bottom: 2px solid var(--red); }
+
+  /* листовка кейса */
+  .leaf { overscroll-behavior: contain; position: fixed; inset: 0; z-index: 50; background: var(--paper); overflow-y: auto; display: none; }
+  .leaf.open { display: block; }
+  .leaf .head { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 14px var(--side); background: var(--black); color: var(--paper); }
+  .leaf .head button { font: 700 18px var(--disp); text-transform: uppercase; background: var(--red); padding: 4px 14px; }
+  .leaf .body { padding: 8vh var(--side) 12vh; display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; }
+  .leaf h2 { grid-column: 1 / 13; font-size: clamp(60px, 11vw, 190px); line-height: .85; }
+  .leaf .problem { grid-column: 1 / 8; font-size: 28px; line-height: 1.3; }
+  .leaf .nums { grid-column: 8 / 13; display: grid; gap: 10px; }
+  .leaf .nums div { background: var(--red); color: var(--paper); padding: 12px 16px; }
+  .leaf .nums b { font: 700 44px/1 var(--disp); display: block; }
+  .leaf ol { grid-column: 1 / 8; list-style: none; counter-reset: l; }
+  .leaf ol li { counter-increment: l; border-top: 3px solid var(--black); padding: 12px 0 12px 56px; position: relative; }
+  .leaf ol li::before { content: counter(l); position: absolute; left: 0; top: 6px; font: 700 36px/1 var(--disp); color: var(--red); }
+  .leaf blockquote { grid-column: 8 / 13; font: 700 30px/1.05 var(--disp); text-transform: uppercase; }
+  .leaf blockquote small { display: block; font: 400 17px var(--text); text-transform: none; margin-top: 10px; }
+  .leaf .scr { grid-column: 1 / 10; height: 76vh; overflow-y: auto; border: 6px solid var(--black); }
+  .leaf .ph { grid-column: 10 / 13; height: 76vh; max-height: 640px; overflow-y: auto; border: 6px solid var(--black); border-radius: 28px; scrollbar-width: none; }
+  .leaf .nx { grid-column: 1 / 13; text-align: left; font: 700 clamp(30px, 4vw, 60px) var(--disp); text-transform: uppercase; border-top: 10px solid var(--black); padding-top: 20px; }
+  .leaf .nx small { display: block; font: 400 18px var(--text); text-transform: none; color: var(--grey); }
+
+  @media (max-width: 860px) {
+    nav.top { top: 10px; }
+    .hero { min-height: 92vh; }
+    .hero .vname { font-size: 9.5vh; }
+    .hero .first { left: calc(var(--side) + 12vh); font-size: 30px; }
+    .hero .circle { width: 72vw; right: -12vw; top: 30vh; }
+    .hero .band { top: 60vh; padding-left: 26vw; font-size: 28px; }
+    .hero .facts { left: 26vw; right: var(--side); bottom: 4vh; font-size: 17px; }
+    .hero .go { display: none; }
+    .poster { grid-template-columns: 1fr; padding-block: 10vh; }
+    .poster > * { grid-column: 1 !important; grid-row: auto !important; }
+    .poster .n { font-size: 90px; }
+    .v2 h2 { position: static; writing-mode: horizontal-tb; transform: none; }
+    .v5 .duo + .duo { display: none; }
+    .v6 .txt { text-align: left; }
+    .theses .grid { grid-template-columns: 1fr; }
+    .leaf .body { grid-template-columns: 1fr; }
+    .leaf .body > * { grid-column: 1 !important; }
+    .leaf .scr { display: none; }
+    .leaf .ph { width: min(300px, 100%); justify-self: center; }
+    .call .mega { width: 80vw; height: 80vw; opacity: .5; }
+  }
+  @media (prefers-reduced-motion: reduce) { .duo img { transition: none; } }
+</style>
+</head>
+<body>
+<nav class="top"><a href="#works">Работы</a><a href="#theses">Тезисы</a><a href="#rates">Расценки</a><a href="#call">Писать</a></nav>
+
+<section class="hero">
+  <h1 class="vname d" id="vname"></h1>
+  <p class="first d" id="first"></p>
+  <div class="circle duo" id="hero-img"></div>
+  <p class="band d">Сайты для малого дела</p>
+  <p class="facts" id="facts"></p>
+  <a class="go d" href="#works"><span>Смотреть работы</span><i></i></a>
+</section>
+
+<main id="works"></main>
+
+<section class="theses" id="theses">
+  <h2 class="d">Тезисы</h2>
+  <div class="grid"><div class="about" id="about"></div><ol id="steps"></ol></div>
+</section>
+
+<section class="rates" id="rates">
+  <h2 class="d">Расценки</h2>
+  <div class="wrap"><table id="rates-t"></table></div>
+</section>
+
+<section class="call" id="call">
+  <div class="mega" aria-hidden="true"></div>
+  <p class="d">Пишите.<br>Отвечу за день.</p>
+  <span class="mail" id="mail"></span>
+  <p class="sub"><span id="tg"></span><button id="copy">Скопировать почту</button></p>
+</section>
+
+<div class="leaf" id="leaf" role="dialog" aria-modal="true" aria-labelledby="leaf-title"></div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+$('#vname').textContent = D.last;
+$('#first').innerHTML = esc(D.first) + '<br>веб-дизайн';
+$('#hero-img').innerHTML = `<img src="${shot(P[0], 'desk')}" alt="">`;
+$('#facts').textContent = `${D.city}. Шесть концептов сайтов для малого дела. Свободен с ${D.windowFrom}.`;
+
+$('#works').innerHTML = P.map((p, i) => {
+  const img = `<div class="duo"><img src="${shot(p, 'desk')}" alt="Сайт ${esc(p.name)}" loading="lazy"></div>`;
+  const mob = i === 4 ? `<div class="duo"><img src="${shot(p, 'mob')}" alt="" loading="lazy"></div>` : '';
+  return `<section class="poster v${i + 1}"><span class="n d" aria-hidden="true">${i + 1}</span>
+    ${img}${mob}
+    <div class="txt"><h2 class="d">${esc(p.name)}</h2>
+      <p class="what"><b>${esc(p.client)}, ${esc(p.city)}</b>${esc(p.short)}. ${esc(p.kind)}.</p>
+      <button class="rd" data-i="${i}">Читать кейс</button></div>
+  </section>`;
+}).join('');
+
+$('#about').innerHTML = D.about.map(t => `<p>${esc(t)}</p>`).join('');
+$('#steps').innerHTML = D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('');
+$('#rates-t').innerHTML = D.services.map(s => `<tr><td>${esc(s.name)}</td><td>${esc(s.text)}<br><small>${esc(s.time)}</small></td><td>${esc(s.price)}</td></tr>`).join('');
+$('#mail').textContent = D.email;
+$('#tg').textContent = 'Телеграм ' + D.telegram;
+$('#copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено'; }
+  setTimeout(() => e.target.textContent = 'Скопировать почту', 2200);
+});
+
+const leaf = $('#leaf');
+let lastFocus;
+function openLeaf(i) {
+  const p = P[i], n = P[(i + 1) % P.length];
+  lastFocus = document.activeElement;
+  leaf.innerHTML = `<div class="head"><span class="d">Листовка ${i + 1} из ${P.length}</span><button id="leaf-close">Закрыть</button></div>
+    <div class="body">
+      <h2 class="d" id="leaf-title">${esc(p.name)}</h2>
+      <p class="problem">${esc(p.problem)}</p>
+      <div class="nums">${p.result.map(([a, b]) => `<div><b>${esc(a)}</b>${esc(b)}</div>`).join('')}</div>
+      <ol>${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ol>
+      <blockquote>«${esc(p.quote)}»<small>${esc(p.quoteBy)}</small></blockquote>
+      <div class="scr" tabindex="0" aria-label="Вся страница"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div>
+      <div class="ph" tabindex="0" aria-label="Телефон"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div>
+      <button class="nx" data-i="${(i + 1) % P.length}"><small>Следующая листовка</small>${esc(n.name)}</button>
+    </div>`;
+  leaf.classList.add('open'); leaf.scrollTop = 0; document.body.style.overflow = 'hidden';
+  $('#leaf-close').focus();
+}
+function closeLeaf() { leaf.classList.remove('open'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }
+document.addEventListener('click', e => {
+  if (e.target.id === 'leaf-close') return closeLeaf();
+  const b = e.target.closest('[data-i]'); if (b) openLeaf(+b.dataset.i);
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && leaf.classList.contains('open')) closeLeaf(); });
+</script>
+</body>
+</html>

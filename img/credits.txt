@@ -1,0 +1,3 @@
+desk-notes.jpg: Person writing in notebook while using laptop at a modern workspace.jpg, CC BY 2.0, https://commons.wikimedia.org/wiki/File:Person_writing_in_notebook_while_using_laptop_at_a_modern_workspace.jpg
+desk-laptop.jpg: Working at a desk with a laptop coffee cup and a plant on a white surface.jpg, CC BY 2.0, https://commons.wikimedia.org/wiki/File:Working_at_a_desk_with_a_laptop_coffee_cup_and_a_plant_on_a_white_surface.jpg
+desk-top.jpg: Laptop on a desk (Unsplash).jpg, CC0, https://commons.wikimedia.org/wiki/File:Laptop_on_a_desk_(Unsplash).jpg

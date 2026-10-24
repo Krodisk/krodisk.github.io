@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Зин Ковалёва</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Зин, напечатанный на ризографе двумя красками: флуоресцентный розовый и синий ложатся друг на друга со сдвигом, картинки растром */
+  :root {
+    --paper: #f4f1ea;
+    --pink: #ff48b0;
+    --blue: #3255a4;
+    --yellow: #ffe800;
+    --ink: #1d2340;
+    --disp: "Dela Gothic One", "Arial Black", sans-serif;
+    --text: "Rubik", "Segoe UI", sans-serif;
+    --side: max(16px, 4vw);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #d9d5cc; color: var(--blue); font: 400 18px/1.5 var(--text); overflow-x: clip; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+
+  /* лист бумаги с зерном */
+  .sheet { position: relative; max-width: 1180px; margin: 0 auto 50px; background: var(--paper); padding: 70px var(--side) 80px; box-shadow: 0 2px 0 #c9c4b8, 0 30px 50px -30px rgba(0,0,0,.4); overflow: hidden; }
+  .sheet::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .4 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .sheet:nth-of-type(odd) { transform: rotate(-.35deg); }
+  .sheet:nth-of-type(even) { transform: rotate(.3deg); }
+  .staple { position: absolute; top: 18px; width: 40px; height: 6px; border: 2px solid #9a9a9a; border-bottom: 0; }
+  .staple.a { left: 30%; } .staple.b { right: 30%; }
+  .pnum { position: absolute; bottom: 22px; right: var(--side); font: 400 22px var(--disp); color: var(--pink); }
+
+  /* двухкрасочный текст со сдвигом */
+  h2.ov, h1.ov { display: block; width: fit-content; }
+  .ov { position: relative; display: inline-block; font-family: var(--disp); line-height: .9; color: var(--pink); }
+  .ov::after { content: attr(data-t); position: absolute; left: 0; top: 0; color: var(--blue); mix-blend-mode: multiply; transform: translate(var(--dx, 7px), var(--dy, 5px)); transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+  .boot .ov::after { transform: translate(40px, 24px); }
+
+  /* растровые картинки */
+  .riso { position: relative; background: var(--pink); overflow: hidden; }
+  .riso img { width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(1) contrast(1.15) brightness(1.3); mix-blend-mode: multiply; }
+  .riso::after { content: ""; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .55;
+    background: radial-gradient(circle, transparent 38%, var(--paper) 42%) 0 0 / 5px 5px; }
+  .riso.blue { background: #7f9ad6; }
+  .riso.yellow { background: var(--yellow); }
+  .riso.live img { filter: none; mix-blend-mode: normal; }
+  .riso.live::after { display: none; }
+
+  /* обложка */
+  .cover { min-height: 92vh; display: grid; grid-template-rows: auto 1fr auto; }
+  .cover .tiny { display: flex; justify-content: space-between; font-weight: 500; flex-wrap: wrap; gap: 10px; }
+  .cover h1 { font-size: clamp(50px, 13.8vw, 180px); align-self: center; margin-top: 20px; }
+  .cover .art { position: absolute; right: -4%; top: 30%; width: 46%; aspect-ratio: 1; border-radius: 50%; z-index: 0; }
+  .cover h1, .cover .tiny, .cover .bot { position: relative; z-index: 1; }
+  .cover .bot { display: flex; justify-content: space-between; align-items: end; gap: 30px; flex-wrap: wrap; }
+  .cover .bot p { max-width: 34ch; font-size: 21px; color: var(--ink); }
+  .sticker { display: inline-block; background: var(--yellow); color: var(--ink); font: 400 22px/1.1 var(--disp); padding: 10px 16px; transform: rotate(-4deg); box-shadow: 3px 3px 0 var(--blue); }
+
+  /* содержание */
+  .toc h2 { font-size: clamp(54px, 8vw, 110px); margin-bottom: 40px; }
+  .toc ol { list-style: none; columns: 2; column-gap: 50px; }
+  .toc li { break-inside: avoid; border-top: 3px dotted var(--pink); padding: 12px 0; }
+  .toc a { display: flex; gap: 16px; text-decoration: none; align-items: baseline; }
+  .toc a b { font: 400 30px var(--disp); color: var(--ink); }
+  .toc a span { font-size: 15px; }
+  .toc a:hover b { color: var(--pink); }
+
+  /* страницы проектов */
+  .proj { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: start; }
+  .proj.flip { grid-template-columns: 1fr 1.25fr; }
+  .proj.flip .pics { order: 2; }
+  .pics { position: relative; }
+  .pics .main { aspect-ratio: 16 / 10; }
+  .pics .mob { position: absolute; width: 30%; aspect-ratio: 9 / 19; right: -14px; bottom: -40px; border: 4px solid var(--paper); }
+  .pics .hint { font-size: 14px; margin-top: 52px; }
+  .proj .k { font-weight: 700; color: var(--pink); }
+  .proj h2 { font-size: clamp(54px, 7vw, 104px); margin: 10px 0 20px; }
+  .proj .problem { color: var(--ink); font-size: 19px; }
+  .cuts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+  .cuts span { background: var(--yellow); color: var(--ink); padding: 8px 12px; font-size: 15px; line-height: 1.2; box-shadow: 2px 2px 0 var(--pink); }
+  .cuts span:nth-child(2) { transform: rotate(2deg); background: #fff; }
+  .cuts span:nth-child(3) { transform: rotate(-2deg); }
+  .cuts b { display: block; font: 400 30px/1 var(--disp); }
+  .toggle { margin-top: 26px; font: 700 17px var(--text); background: var(--blue); color: var(--paper); padding: 12px 20px; box-shadow: 4px 4px 0 var(--pink); }
+  .toggle:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--pink); }
+  .more { grid-column: 1 / 3; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s cubic-bezier(.7,0,.2,1); }
+  .more > div { overflow: hidden; }
+  .open .more { grid-template-rows: 1fr; }
+  .moreg { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-top: 34px; border-top: 4px dotted var(--blue); margin-top: 10px; }
+  .moreg h3 { font: 400 26px var(--disp); color: var(--pink); margin-bottom: 10px; }
+  .moreg ol { padding-left: 22px; color: var(--ink); }
+  .moreg ol li { margin-bottom: 8px; }
+  .moreg q { display: block; font: 400 30px/1.15 var(--disp); color: var(--blue); quotes: "«" "»"; }
+  .moreg q + p { margin-top: 10px; font-size: 15px; }
+  .frames { grid-column: 1 / 3; display: grid; grid-template-columns: 3fr 1fr; gap: 20px; align-items: start; }
+  .frames div { height: 66vh; overflow-y: auto; border: 4px solid var(--blue); background: #fff; }
+  .frames .ph { border-radius: 26px; max-height: 600px; scrollbar-width: none; }
+
+  /* обо мне и купоны */
+  .me { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; align-items: start; }
+  .me .riso { aspect-ratio: 4 / 5; }
+  .me h2, .coupons h2, .write h2 { font-size: clamp(54px, 8vw, 110px); margin-bottom: 40px; }
+  .me p { color: var(--ink); }
+  .me p + p { margin-top: .8em; }
+  .me .steps { list-style: none; counter-reset: s; margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; }
+  .me .steps li { counter-increment: s; font-size: 15px; color: var(--ink); }
+  .me .steps li::before { content: counter(s); font: 400 34px/1 var(--disp); color: var(--pink); display: block; }
+  .coupons .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .coupon { border: 3px dashed var(--blue); padding: 22px 24px; position: relative; color: var(--ink); }
+  .coupon::before { content: "✂"; position: absolute; top: -16px; left: 20px; background: var(--paper); color: var(--blue); padding: 0 6px; font-size: 20px; }
+  .coupon b { display: block; font: 400 30px var(--disp); color: var(--blue); }
+  .coupon .pr { font: 400 24px var(--disp); color: var(--pink); margin: 6px 0; }
+  .coupon p { font-size: 15px; }
+  .write .mail { font: 400 clamp(28px, 5vw, 70px) var(--disp); color: var(--ink); word-break: break-all; }
+  .write .row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 24px; align-items: center; }
+  .write .row button { background: var(--pink); color: var(--paper); font-weight: 700; padding: 10px 18px; box-shadow: 4px 4px 0 var(--blue); }
+  .colophon { max-width: 1180px; margin: 0 auto 60px; padding: 0 var(--side); font-size: 14px; color: #6b6a64; }
+
+  @media (max-width: 860px) {
+    body { font-size: 17px; }
+    .sheet { padding: 56px 16px 70px; margin-bottom: 30px; transform: none !important; }
+    .cover .art { width: 80%; right: -24%; top: 36%; opacity: .8; }
+    .toc ol { columns: 1; }
+    .proj, .proj.flip, .me { grid-template-columns: 1fr; gap: 24px; }
+    .proj.flip .pics { order: 0; }
+    .pics .mob { width: 34%; right: 0; }
+    .more, .frames { grid-column: 1; }
+    .moreg { grid-template-columns: 1fr; }
+    .frames { grid-template-columns: 1fr; }
+    .frames div:first-child { display: none; }
+    .frames .ph { width: min(300px, 100%); justify-self: center; height: 70vh; }
+    .coupons .grid, .me .steps { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .ov::after, .more { transition: none; } .boot .ov::after { transform: translate(7px, 5px); } }
+</style>
+</head>
+<body class="boot">
+<main id="zine"></main>
+<p class="colophon" id="colophon"></p>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ov = (t, tag = 'span', cls = '') => `<${tag} class="ov ${cls}" data-t="${esc(t)}">${esc(t)}</${tag}>`;
+const staples = '<span class="staple a"></span><span class="staple b"></span>';
+let page = 1;
+const pn = () => `<span class="pnum">${page++}</span>`;
+
+let html = `<section class="sheet cover">${staples}
+  <div class="tiny"><span>Зин о сайтах для малого дела</span><span>Выпуск 1, тираж 40 экземпляров</span></div>
+  <div class="riso art"><img src="${shot(P[3], 'desk')}" alt=""></div>
+  ${ov(D.last, 'h1')}
+  <div class="bot"><p>${esc(D.first)} делает сайты для пекарен, клиник, прокатов и фестивалей. ${esc(D.city)}. Внутри шесть концептов.</p><span class="sticker">Свободен<br>с ${esc(D.windowFrom)}</span></div>${pn()}</section>`;
+
+html += `<section class="sheet toc">${ov('Внутри', 'h2')}<ol>${P.map((p, i) => `<li><a href="#${p.id}"><b>${esc(p.name)}</b><span>${esc(p.client.toLowerCase())}, ${esc(p.city)}, стр. ${i + 3}</span></a></li>`).join('')}<li><a href="#me"><b>Кто это делает</b><span>стр. 9</span></a></li><li><a href="#coupons"><b>Купоны</b><span>цены, стр. 10</span></a></li></ol>${pn()}</section>`;
+
+const tints = ['', 'blue', 'yellow', '', 'blue', 'yellow'];
+html += P.map((p, i) => `<section class="sheet" id="${p.id}"><article class="proj ${i % 2 ? 'flip' : ''}">
+    <div class="pics"><div class="riso main ${tints[i]}"><img src="${shot(p, 'desk')}" alt="Главный экран сайта ${esc(p.name)}" loading="lazy"></div><div class="riso mob ${tints[(i + 1) % 6]}"><img src="${shot(p, 'mob')}" alt="Мобильная версия" loading="lazy"></div><p class="hint">Наведите на картинку, чтобы увидеть её в цвете.</p></div>
+    <div><p class="k">${esc(p.client)}, ${esc(p.city)}, ${p.year}</p>${ov(p.name, 'h2')}<p class="problem">${esc(p.problem)}</p>
+      <div class="cuts">${p.result.map(([a, b]) => `<span><b>${esc(a)}</b>${esc(b)}</span>`).join('')}</div>
+      <button class="toggle" aria-expanded="false">Читать весь концепт</button></div>
+    <div class="more"><div><div class="moreg">
+      <div><h3>Что сделали</h3><ol>${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ol></div>
+      <div><h3>С чего начал</h3><q>${esc(p.quote)}</q><p>${esc(p.kind)}. ${esc(p.tools)}.</p></div>
+      <div class="frames"><div tabindex="0" aria-label="Вся страница"><img data-src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div><div class="ph" tabindex="0" aria-label="Телефон"><img data-src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div></div>
+    </div></div></div>
+  </article>${pn()}</section>`).join('');
+
+html += `<section class="sheet" id="me"><div class="me"><div class="riso yellow"><img src="img/desk-notes.jpg" alt="Блокнот и ноутбук на рабочем столе"></div>
+  <div>${ov('Кто это', 'h2')}${D.about.map(t => `<p>${esc(t)}</p>`).join('')}<ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ol></div></div>${pn()}</section>`;
+
+html += `<section class="sheet coupons" id="coupons">${ov('Купоны', 'h2')}<div class="grid">${D.services.map(s => `<div class="coupon"><b>${esc(s.name)}</b><p class="pr">${esc(s.price)}</p><p>${esc(s.text)} Срок: ${esc(s.time)}.</p></div>`).join('')}</div>${pn()}</section>`;
+
+html += `<section class="sheet write">${ov('Напишите', 'h2')}<p class="mail" id="mail">${esc(D.email)}</p><div class="row"><button id="copy">Скопировать адрес</button><span>Телеграм ${esc(D.telegram)}. Отвечаю за день.</span></div>${pn()}</section>`;
+$('#zine').innerHTML = html;
+$('#colophon').textContent = `Отпечатано на ризографе в двух красках: флуоресцентный розовый и синий. Совмещение не идеальное, так и задумано. ${D.name}, ${new Date().getFullYear()}.`;
+
+requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('boot')));
+
+/* цвет при наведении */
+document.querySelectorAll('.riso').forEach(r => {
+  r.addEventListener('pointerenter', () => r.classList.add('live'));
+  r.addEventListener('pointerleave', () => r.classList.remove('live'));
+});
+document.querySelectorAll('.toggle').forEach(b => b.addEventListener('click', () => {
+  const art = b.closest('.proj'), open = art.classList.toggle('open');
+  b.setAttribute('aria-expanded', open); b.textContent = open ? 'Свернуть' : 'Читать весь концепт';
+  art.querySelectorAll('img[data-src]').forEach(im => { im.src = im.dataset.src; im.removeAttribute('data-src'); });
+}));
+$('#copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено'; }
+  setTimeout(() => e.target.textContent = 'Скопировать адрес', 2200);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фонд Ковалёва</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* Архивная картотека: каждый проект как карточка в каталоге, внутри папка-дело с листами, фото на скрепках и фиолетовые штампы */
+  :root {
+    --wall: #c3cabb;
+    --wall-dark: #aeb6a6;
+    --card: #f7f3e6;
+    --manila: #e6cf98;
+    --ink: #24231f;
+    --soft: #6a675d;
+    --rule: #c9473a;
+    --blue: #7d9cc7;
+    --stamp: #5a3fa3;
+    --type: "PT Mono", "Courier New", monospace;
+    --head: "Old Standard TT", Georgia, serif;
+    --side: max(16px, 4vw);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--wall); color: var(--ink); font: 400 15px/1.55 var(--type); }
+  img { display: block; max-width: 100%; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  button { background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px dashed var(--stamp); outline-offset: 3px; }
+  .wrap { padding-inline: var(--side); max-width: 1440px; margin: 0 auto; }
+
+  .head { padding-block: 50px 30px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; }
+  .head .fond { font-size: 14px; color: var(--soft); }
+  .head h1 { font: 700 clamp(46px, 6.6vw, 104px)/.95 var(--head); margin-top: 10px; }
+  .head h1 i { font-weight: 400; }
+  .head .desc { font-size: 15px; max-width: 46ch; }
+  .head .desc p + p { margin-top: .8em; }
+
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: -1px; position: relative; z-index: 2; }
+  .tabs button { background: var(--wall-dark); padding: 8px 18px 10px; border-radius: 10px 10px 0 0; font-size: 14px; }
+  .tabs button[aria-pressed="true"] { background: var(--card); }
+  .drawer { background: var(--card); padding: 34px; border-radius: 0 6px 6px 6px; box-shadow: 0 2px 0 var(--wall-dark), 0 30px 50px -30px rgba(0,0,0,.35); }
+  .drawer .count { font-size: 14px; color: var(--soft); margin-bottom: 20px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: 30px; }
+  .icard { position: relative; text-align: left; background: #fffdf6; aspect-ratio: 5 / 3; padding: 18px 22px 30px; box-shadow: 0 1px 0 #d8d1bb, 0 12px 20px -14px rgba(0,0,0,.4);
+    background-image: linear-gradient(transparent 46px, var(--rule) 46px, var(--rule) 48px, transparent 48px), repeating-linear-gradient(transparent 0 23px, rgba(125,156,199,.35) 23px 24px);
+    background-position: 0 0, 0 50px; transition: transform .25s; display: flex; flex-direction: column; }
+  .icard:hover { transform: translateY(-6px) rotate(-.4deg); }
+  .icard::after { content: ""; position: absolute; left: 50%; bottom: 10px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--card); box-shadow: inset 0 1px 2px rgba(0,0,0,.35); }
+  .icard .code { display: flex; justify-content: space-between; font-size: 13px; }
+  .icard h3 { font: 700 28px/1 var(--head); margin-top: 12px; }
+  .icard dl { display: grid; grid-template-columns: auto 1fr; gap: 0 10px; font-size: 13.5px; line-height: 24px; margin-top: 4px; }
+  .icard dt { color: var(--soft); }
+  .icard .thumb { position: absolute; right: 20px; top: 60px; width: 34%; transform: rotate(3deg); box-shadow: 0 6px 10px -4px rgba(0,0,0,.4); border: 4px solid #fff; }
+  .icard .thumb::before { content: ""; position: absolute; top: -14px; left: 18px; width: 12px; height: 34px; border: 2px solid #8b8f94; border-radius: 6px; }
+  .stamp { position: absolute; border: 3px solid var(--stamp); color: var(--stamp); padding: 2px 10px; font: 700 15px var(--type); text-transform: uppercase; transform: rotate(-9deg); opacity: .82; mix-blend-mode: multiply; border-radius: 4px; }
+  .icard .stamp { right: 26px; bottom: 26px; }
+
+  section.s { margin-top: 70px; }
+  .sheet { background: #fffdf6; padding: 46px 52px; box-shadow: 0 30px 50px -30px rgba(0,0,0,.35); position: relative; }
+  .sheet h2 { font: 700 40px/1 var(--head); margin-bottom: 24px; }
+  .sheet .num { position: absolute; right: 40px; top: 30px; font-size: 13px; color: var(--soft); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+  .two > div p + p { margin-top: 1em; }
+  .price td { padding: 10px 0; border-bottom: 1px dashed #bdb7a3; vertical-align: top; }
+  .price td:last-child { text-align: right; white-space: nowrap; padding-left: 20px; }
+  .price table { width: 100%; border-collapse: collapse; }
+  .price small { color: var(--soft); }
+  .steps { list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; padding: 8px 0 8px 44px; position: relative; border-bottom: 1px dashed #bdb7a3; }
+  .steps li::before { content: counter(s, upper-roman) "."; position: absolute; left: 0; font-weight: 700; }
+
+  .form label { display: block; font-size: 13px; color: var(--soft); margin-top: 14px; }
+  .form select { background-color: var(--card); color: var(--ink); }
+  .form input, .form textarea, .form select { display: block; width: 100%; background: transparent; border: 0; border-bottom: 1.5px solid var(--ink); padding: 6px 0; font-size: 16px; }
+  .form textarea { resize: vertical; min-height: 80px; }
+  .form .acts { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 22px; align-items: center; }
+  .form .acts button { border: 2px solid var(--ink); padding: 8px 18px; font-weight: 700; }
+  .form .acts button.primary { background: var(--ink); color: var(--card); }
+  .form .out { margin-top: 16px; font-size: 14px; color: var(--stamp); }
+  footer { padding-block: 40px 60px; font-size: 13px; color: var(--soft); }
+
+  /* дело */
+  .shade { overscroll-behavior: contain; position: fixed; inset: 0; z-index: 30; background: rgba(40, 44, 38, .7); display: none; overflow-y: auto; padding: 40px var(--side); }
+  .shade.open { display: block; }
+  .folder { max-width: 1240px; margin: 30px auto 0; background: var(--manila); border-radius: 0 10px 10px 10px; padding: 34px; position: relative; box-shadow: 0 40px 70px -30px rgba(0,0,0,.6); }
+  .folder::before { content: attr(data-tab); position: absolute; top: -30px; left: 0; height: 30px; padding: 6px 24px; background: var(--manila); border-radius: 10px 10px 0 0; font-size: 13px; }
+  .folder .x { position: absolute; right: 18px; top: 16px; border: 2px solid var(--ink); padding: 4px 12px; font-weight: 700; background: var(--card); }
+  .folder .cover { display: flex; justify-content: space-between; gap: 30px; align-items: flex-end; padding: 10px 6px 26px; }
+  .folder .cover h2 { font: 700 clamp(44px, 6vw, 84px)/.95 var(--head); }
+  .folder .cover p { font-size: 14px; max-width: 40ch; }
+  .leaves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .leaf { background: #fffdf6; padding: 26px 24px 30px; position: relative; box-shadow: 0 4px 10px -6px rgba(0,0,0,.35); }
+  .leaf:nth-child(2) { transform: rotate(.6deg); } .leaf:nth-child(3) { transform: rotate(-.5deg); }
+  .leaf h3 { font: 700 22px var(--head); margin-bottom: 10px; }
+  .leaf .ln { position: absolute; right: 18px; top: 14px; font-size: 12px; color: var(--soft); }
+  .leaf ol { padding-left: 18px; } .leaf li { margin-bottom: 8px; }
+  .leaf .big { display: block; font: 700 40px/1 var(--head); }
+  .leaf .r + .r { margin-top: 12px; }
+  .leaf .stamp { right: 14px; bottom: -8px; background: rgba(255,255,255,.4); }
+  .reader { display: grid; grid-template-columns: 3fr 1fr; gap: 20px; margin-top: 20px; align-items: start; }
+  .reader > div { height: 70vh; overflow-y: auto; background: #fff; border: 10px solid #3a3d38; }
+  .reader .ph { border-radius: 28px; max-height: 620px; scrollbar-width: none; }
+  .reader p { grid-column: 1 / 3; font-size: 13px; color: #4b4637; }
+  .quote { margin-top: 20px; background: #fffdf6; padding: 20px 24px; font: italic 400 24px/1.35 var(--head); }
+  .quote small { display: block; font: 400 14px var(--type); margin-top: 6px; color: var(--soft); }
+  .folder .nav { display: flex; justify-content: space-between; margin-top: 20px; }
+  .folder .nav button { border: 2px solid var(--ink); padding: 6px 14px; font-weight: 700; background: var(--card); }
+
+  @media (max-width: 860px) {
+    .head, .two { grid-template-columns: 1fr; gap: 20px; }
+    .drawer { padding: 16px; }
+    .icard { aspect-ratio: auto; min-height: 260px; padding-bottom: 40px; }
+    .icard .thumb { position: static; width: 70%; margin: 10px 0 6px; transform: rotate(1.5deg); }
+    .icard dl { margin-right: 0; }
+    .sheet { padding: 30px 18px; }
+    .shade { padding: 10px; }
+    .folder { padding: 20px 14px; }
+    .folder .cover { flex-direction: column; align-items: flex-start; }
+    .leaves, .reader { grid-template-columns: 1fr; }
+    .reader > div:first-child { display: none; }
+    .reader .ph { width: min(300px, 100%); justify-self: center; }
+    .reader p { grid-column: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .icard { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div><p class="fond" id="fond"></p><h1>Картотека<br><i>сайтов</i></h1></div>
+    <div class="desc" id="desc"></div>
+  </header>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Разделы картотеки"></div>
+  <div class="drawer"><p class="count" id="count"></p><div class="cards" id="cards"></div></div>
+
+  <section class="s" id="about"><div class="sheet"><span class="num">Лист 7</span><h2>Справка об авторе</h2><div class="two"><div id="about-text"></div><div><h3 style="font:700 22px var(--head);margin-bottom:10px">Порядок работы</h3><ol class="steps" id="steps"></ol></div></div></div></section>
+  <section class="s"><div class="sheet price"><span class="num">Лист 8</span><h2>Прейскурант</h2><table id="price"></table></div></section>
+  <section class="s" id="contact"><div class="sheet form"><span class="num">Лист 9</span><h2>Запрос в архив</h2>
+    <div class="two"><div>
+      <label for="f-name">Как вас зовут</label><input id="f-name" name="name" autocomplete="name">
+      <label for="f-biz">Чем занимаетесь</label><input id="f-biz" name="business" autocomplete="organization" placeholder="Например: кофейня в Самаре…">
+      <label for="f-kind">Что нужно</label><select id="f-kind" name="kind"><option>Лендинг</option><option>Сайт под ключ</option><option>Редизайн</option><option>Консультация</option></select>
+      <label for="f-text">Что сейчас мешает</label><textarea id="f-text" name="message" autocomplete="off"></textarea>
+      <div class="acts"><button class="primary" id="f-send">Открыть письмо с запросом</button><button id="f-copy">Скопировать адрес</button></div>
+      <p class="out" id="f-out" role="status"></p>
+    </div><div><p>Запросы принимаются по почте <b id="mail"></b> и в телеграме <b id="tg"></b>.</p><p style="margin-top:1em">Ответ в течение рабочего дня. Ближайшее свободное окно: <b id="win"></b>.</p></div></div>
+  </div></section>
+  <footer id="foot"></footer>
+</div>
+
+<div class="shade" id="shade" role="dialog" aria-modal="true" aria-labelledby="f-title"></div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const code = (p, i) => `КД-${p.year}-${String(i + 1).padStart(2, '0')}`;
+
+$('#fond').textContent = `Фонд № 1. ${D.name}, веб-дизайнер. ${D.city}`;
+$('#desc').innerHTML = `<p>Здесь хранятся шесть концептов сайтов для малого дела. Компании вымышленные, задачи настоящие. На каждой карточке краткая опись. Чтобы открыть дело целиком, нажмите на карточку.</p><p>Фото на скрепках взяты с главных страниц сайтов.</p>`;
+
+const groups = [['Все', () => true], ['Сайты', p => !/запис|календар|предзаказ/i.test(p.kind)], ['Сервисы записи', p => /запис|календар|предзаказ/i.test(p.kind)]];
+$('#tabs').innerHTML = groups.map(([n], i) => `<button aria-pressed="${i === 0}" data-g="${i}">${n}</button>`).join('');
+function renderCards(g) {
+  const list = P.map((p, i) => [p, i]).filter(([p]) => groups[g][1](p));
+  $('#count').textContent = `В ящике карточек: ${list.length}`;
+  $('#cards').innerHTML = list.map(([p, i]) => `<button class="icard" data-i="${i}" aria-label="Открыть дело ${esc(p.name)}">
+    <span class="code"><span>Шифр ${code(p, i)}</span><span>${p.year}</span></span>
+    <h3>${esc(p.name)}</h3>
+    <dl><dt>Для кого</dt><dd>${esc(p.client.toLowerCase())}</dd><dt>Город</dt><dd>${esc(p.city)}</dd><dt>Работа</dt><dd>${esc(p.kind.toLowerCase())}</dd><dt>Деталь</dt><dd>${esc(p.result[0][0])} ${esc(p.result[0][1])}</dd><dt>Суть</dt><dd>${esc(p.short.toLowerCase())}</dd><dt>Мысль</dt><dd>«${esc(p.quote)}»</dd></dl>
+    <img class="thumb" src="${shot(p, 'desk')}" alt="" loading="lazy">
+    <span class="stamp">Концепт</span></button>`).join('');
+}
+$('#tabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $('#tabs').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderCards(+b.dataset.g);
+});
+renderCards(0);
+
+$('#about-text').innerHTML = D.about.map(t => `<p>${esc(t)}</p>`).join('') + `<p>Инструменты: ${esc(D.tools.join(', '))}.</p>`;
+$('#steps').innerHTML = D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('');
+$('#price').innerHTML = D.services.map(s => `<tr><td><b>${esc(s.name)}</b><br><small>${esc(s.text)} Срок: ${esc(s.time)}.</small></td><td>${esc(s.price)}</td></tr>`).join('');
+$('#mail').textContent = D.email; $('#tg').textContent = D.telegram; $('#win').textContent = D.window;
+$('#foot').textContent = `Фонд открыт для запросов. ${D.name}, ${new Date().getFullYear()}.`;
+
+$('#f-send').addEventListener('click', () => {
+  const v = id => $('#' + id).value.trim();
+  if (!v('f-biz')) { $('#f-out').textContent = 'Напишите хотя бы, чем вы занимаетесь. Без этого запрос не принять.'; $('#f-biz').focus(); return; }
+  const body = `Здравствуйте! Меня зовут ${v('f-name') || '…'}.\nЗанимаюсь: ${v('f-biz')}.\nНужно: ${v('f-kind')}.\n\n${v('f-text')}`;
+  location.href = `mailto:${D.email}?subject=${encodeURIComponent('Запрос в архив: ' + v('f-kind'))}&body=${encodeURIComponent(body)}`;
+  $('#f-out').textContent = 'Открываем почтовую программу. Если ничего не произошло, скопируйте адрес и напишите вручную.';
+});
+$('#f-copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено'; }
+  setTimeout(() => e.target.textContent = 'Скопировать адрес', 2200);
+});
+
+/* дело */
+const shade = $('#shade');
+let lastFocus;
+function openFile(i) {
+  const p = P[i];
+  lastFocus = document.activeElement;
+  shade.innerHTML = `<div class="folder" data-tab="Дело ${code(p, i)}"><button class="x" id="fx">Закрыть</button>
+    <div class="cover"><h2 id="f-title">${esc(p.name)}</h2><p>${esc(p.client)}, ${esc(p.city)}. ${esc(p.kind)}. Год ${p.year}. Инструменты: ${esc(p.tools)}.</p></div>
+    <div class="leaves">
+      <div class="leaf"><span class="ln">Лист 1</span><h3>Обстоятельства</h3><p>${esc(p.problem)}</p></div>
+      <div class="leaf"><span class="ln">Лист 2</span><h3>Принятые меры</h3><ol>${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ol></div>
+      <div class="leaf"><span class="ln">Лист 3</span><h3>В цифрах</h3>${p.result.map(([a, b]) => `<div class="r"><span class="big">${esc(a)}</span>${esc(b)}</div>`).join('')}<span class="stamp">Проверено</span></div>
+    </div>
+    <p class="quote">«${esc(p.quote)}»<small>${esc(p.quoteBy)}</small></p>
+    <div class="reader"><div tabindex="0" aria-label="Вся страница"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div><div class="ph" tabindex="0" aria-label="Телефон"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div><p>Приложение 1 и 2. Страница сайта целиком и версия для телефона. Прокручиваются.</p></div>
+    <div class="nav"><button data-f="${(i + P.length - 1) % P.length}">Предыдущее дело</button><button data-f="${(i + 1) % P.length}">Следующее дело</button></div>
+  </div>`;
+  shade.classList.add('open'); shade.scrollTop = 0; document.body.style.overflow = 'hidden'; $('#fx').focus();
+}
+function closeFile() { shade.classList.remove('open'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }
+document.addEventListener('click', e => {
+  const c = e.target.closest('.icard'); if (c) return openFile(+c.dataset.i);
+  const f = e.target.closest('[data-f]'); if (f) return openFile(+f.dataset.f);
+  if (e.target.id === 'fx' || e.target === shade) closeFile();
+});
+addEventListener('keydown', e => { if (e.key === 'Escape' && shade.classList.contains('open')) closeFile(); });
+</script>
+</body>
+</html>

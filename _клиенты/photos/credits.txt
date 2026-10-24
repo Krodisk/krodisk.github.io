@@ -1,0 +1,29 @@
+opara-hero.jpg: Loaves of Bread (Unsplash).jpg, CC0, https://commons.wikimedia.org/wiki/File:Loaves_of_Bread_(Unsplash).jpg
+opara-baguette.jpg: Big loaves of bread for sale.jpg, CC0, https://commons.wikimedia.org/wiki/File:Big_loaves_of_bread_for_sale.jpg
+opara-baker.jpg: Baker woman's hands kneading bread dough.jpg, CC BY 2.0, https://commons.wikimedia.org/wiki/File:Baker_woman%27s_hands_kneading_bread_dough.jpg
+zubr-doc1.jpg: Hospital Dental Engine.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Hospital_Dental_Engine.jpg
+zubr-doc2.jpg: Dentist (Unsplash).jpg, CC0, https://commons.wikimedia.org/wiki/File:Dentist_(Unsplash).jpg
+zubr-doc3.jpg: Dentist in Mexico attending a child.jpg, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Dentist_in_Mexico_attending_a_child.jpg
+zubr-room.jpg: Dentist’s office in Zabrze, Poland, Januray 2022.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Dentist%E2%80%99s_office_in_Zabrze,_Poland,_Januray_2022.jpg
+tihiy-hero.jpg: Kayaker on Skoi Lake in Bowron Lake Provincial Park, BC (DSCF3638).jpg, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Kayaker_on_Skoi_Lake_in_Bowron_Lake_Provincial_Park,_BC_(DSCF3638).jpg
+tihiy-2.jpg: Lake Vuoksa 1.jpg, CC BY-SA 3.0, https://commons.wikimedia.org/wiki/File:Lake_Vuoksa_1.jpg
+tihiy-3.jpg: Coast of the national Park Ladoga skerries. Sortavalsky district. Kirjavalahti Bay. Karelia. Russia.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Coast_of_the_national_Park_Ladoga_skerries._Sortavalsky_district._Kirjavalahti_Bay._Karelia._Russia.jpg
+tihiy-4.jpg: Laineensaari from shore of Papinniemi in Parikkala, South Karelia, Finland, 2022 June.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Laineensaari_from_shore_of_Papinniemi_in_Parikkala,_South_Karelia,_Finland,_2022_June.jpg
+plenka-hero.jpg: RZ Cinema e-ra seats 2021-07 (3).jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:RZ_Cinema_e-ra_seats_2021-07_(3).jpg
+plenka-f1.jpg: Rainbow over lake Ladoga. Karelia. Russia. Радуга над Ладогой. Карелия. Россия - panoramio.jpg, CC BY 3.0, https://commons.wikimedia.org/wiki/File:Rainbow_over_lake_Ladoga._Karelia._Russia._%D0%A0%D0%B0%D0%B4%D1%83%D0%B3%D0%B0_%D0%BD%D0%B0%D0%B4_%D0%9B%D0%B0%D0%B4%D0%BE%D0%B3%D0%BE%D0%B9._%D0%9A%D0%B0%D1%80%D0%B5%D0%BB%D0%B8%D1%8F._%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F_-_panoramio.jpg
+plenka-f2.jpg: Lake Ladoga in the fog. Karelia. Russia. Ладожское озеро в тумане. Карелия. Россия - panoramio.jpg, CC BY 3.0, https://commons.wikimedia.org/wiki/File:Lake_Ladoga_in_the_fog._Karelia._Russia._%D0%9B%D0%B0%D0%B4%D0%BE%D0%B6%D1%81%D0%BA%D0%BE%D0%B5_%D0%BE%D0%B7%D0%B5%D1%80%D0%BE_%D0%B2_%D1%82%D1%83%D0%BC%D0%B0%D0%BD%D0%B5._%D0%9A%D0%B0%D1%80%D0%B5%D0%BB%D0%B8%D1%8F._%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F_-_panoramio.jpg
+plenka-f3.jpg: Lake in Karelia.jpg, CC BY 4.0, https://commons.wikimedia.org/wiki/File:Lake_in_Karelia.jpg
+plenka-f4.jpg: Karelia Landscape.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Karelia_Landscape.jpg
+plenka-crowd.jpg: Cambridge Film Festival Audience 2023.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Cambridge_Film_Festival_Audience_2023.jpg
+suharev-office.jpg: Hampshire County Law Books.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Hampshire_County_Law_Books.jpg
+suharev-archive.jpg: Decreti originali per mese, 1857 - Grande Archivio di Stato, Napoli.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Decreti_originali_per_mese,_1857_-_Grande_Archivio_di_Stato,_Napoli.jpg
+sherst-1.jpg: Yarn Maryland Sheep & Wool Festival MD4.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Yarn_Maryland_Sheep_%26_Wool_Festival_MD4.jpg
+sherst-2.jpg: Yarn Maryland Sheep & Wool Festival MD1.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Yarn_Maryland_Sheep_%26_Wool_Festival_MD1.jpg
+sherst-3.jpg: Yarn Maryland Sheep & Wool Festival MD2.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Yarn_Maryland_Sheep_%26_Wool_Festival_MD2.jpg
+sherst-4.jpg: Worsted rug yarn on cones.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Worsted_rug_yarn_on_cones.jpg
+sherst-5.jpg: Rainbow yarn for knitting, display in front of a needlework shop in Graz, Austria, GW23-100.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Rainbow_yarn_for_knitting,_display_in_front_of_a_needlework_shop_in_Graz,_Austria,_GW23-100.jpg
+sherst-6.jpg: Qiviut yarn skein.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Qiviut_yarn_skein.jpg
+opara-rye.jpg: 100% Rye Bread (5752657009).jpg, CC BY-SA 2.0, https://commons.wikimedia.org/wiki/File:100%25_Rye_Bread_(5752657009).jpg
+opara-croissant.jpg: Croissant-p1010370.jpg, CC BY-SA 2.0 fr, https://commons.wikimedia.org/wiki/File:Croissant-p1010370.jpg
+opara-ciabatta.jpg: Soda Bread.JPG, Public domain, https://commons.wikimedia.org/wiki/File:Soda_Bread.JPG
+opara-hero2.jpg: Home made sour dough bread.jpg, CC BY-SA 4.0, https://commons.wikimedia.org/wiki/File:Home_made_sour_dough_bread.jpg

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Портфолио, десять подач</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Оглавление: десять версий одного портфолио крупными превью, ниже шесть концептов, из которых они собраны */
+  :root { --bg: #efeeea; --ink: #18181a; --soft: #66655f; --line: #d6d4cd; --f: "Onest", "Segoe UI", sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font: 400 17px/1.5 var(--f); padding: 0 max(16px, 4vw) 60px; }
+  a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+  header { padding-block: 70px 50px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: end; border-bottom: 1px solid var(--ink); }
+  h1 { font-size: clamp(40px, 6vw, 92px); line-height: .98; letter-spacing: -.04em; font-weight: 700; }
+  header p { color: var(--soft); max-width: 46ch; }
+  header p + p { margin-top: .7em; }
+  code { font-size: 15px; background: #e2e0d9; padding: 1px 6px; border-radius: 4px; color: var(--ink); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 32px; padding-block: 50px 90px; }
+  .item { text-decoration: none; }
+  .item .shot { border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--line); aspect-ratio: 16 / 10; background: #ddd; }
+  .item img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .item:hover img { transform: scale(1.025); }
+  .item .cap { display: flex; gap: 18px; margin-top: 16px; align-items: baseline; }
+  .item .cap span { font-variant-numeric: tabular-nums; color: var(--soft); min-width: 2ch; }
+  .item h2 { font-size: 24px; font-weight: 500; letter-spacing: -.015em; }
+  .item p { color: var(--soft); margin-top: 2px; }
+  section.clients { border-top: 1px solid var(--ink); padding-top: 22px; }
+  section.clients .head { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; margin-bottom: 30px; }
+  section.clients h2 { font-size: 36px; letter-spacing: -.02em; font-weight: 500; }
+  section.clients .head p { color: var(--soft); }
+  .clients-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .client { text-decoration: none; }
+  .client img { border-radius: 8px; box-shadow: 0 0 0 1px var(--line); aspect-ratio: 16 / 10; object-fit: cover; width: 100%; }
+  .client b { display: block; margin-top: 10px; font-weight: 500; }
+  .client span { color: var(--soft); font-size: 15px; }
+  footer { margin-top: 70px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--soft); font-size: 14px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  @media (max-width: 820px) {
+    header, section.clients .head { grid-template-columns: 1fr; gap: 16px; }
+    header { padding-top: 40px; }
+    .grid, .clients-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .item img { transition: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Одно портфолио, десять подач</h1>
+  <div>
+    <p>Везде один и тот же дизайнер и шесть одних и тех же проектов. Меняется только то, как они показаны: от строгой сетки до рабочего стола Windows 95.</p>
+    <p>Чтобы подставить своё имя, проекты, цены и контакты, поменяйте файл <code>shared/projects.js</code> и картинки в папке <code>img</code>. Все десять сайтов обновятся сразу.</p>
+  </div>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<section class="clients">
+  <div class="head"><h2>Макеты концептов</h2><p>Шесть сайтов для вымышленных компаний. Из них сняты все скриншоты в портфолио. Это обычные страницы, их можно открыть, поправить и переснять.</p></div>
+  <div class="clients-grid" id="clients"></div>
+</section>
+
+<footer><span>Фото в макетах взяты с Wikimedia Commons, авторы и лицензии перечислены в <a href="_клиенты/photos/credits.txt">credits.txt</a>.</span></footer>
+
+<script src="shared/projects.js"></script>
+<script>
+const SITES = [
+  ['01-setka', 'Сетка', 'Швейцарская сетка на 12 колонок. Клавиша G показывает её поверх страницы.'],
+  ['02-shrift', 'Крупный шрифт', 'Названия проектов на всю ширину, буквы залиты фотографиями.'],
+  ['03-stol', 'Рабочий стол', 'Распечатки сайтов на режущем коврике, их можно двигать мышью.'],
+  ['04-galereya', 'Галерея', 'Музейный зал с горизонтальной прогулкой и аудиогидом к каждой работе.'],
+  ['05-brauzer', 'Браузер', 'Концепты открыты во вкладках, на макетах пометки дизайнера.'],
+  ['06-konstruktivizm', 'Конструктивизм', 'Плакаты двадцатых: работы напечатаны в красном и чёрном.'],
+  ['07-windows', 'Windows 95', 'Работы лежат в папке, сайты открываются в «Обозревателе».'],
+  ['08-zhurnal', 'Журнал', 'Обложка, содержание и развороты, где каждый проект подан как статья.'],
+  ['09-arhiv', 'Архив', 'Картотека: проекты как каталожные карточки, внутри дела со штампами.'],
+  ['10-rizograf', 'Ризограф', 'Зин в две краски со сдвигом и растровыми картинками.']
+];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+document.getElementById('grid').innerHTML = SITES.map(([f, t, d], i) => `<a class="item" href="${f}.html"><div class="shot"><img src="img/hub/${f}.jpg" alt="Первый экран версии «${t}»" loading="lazy"></div><div class="cap"><span>${String(i + 1).padStart(2, '0')}</span><div><h2>${t}</h2><p>${d}</p></div></div></a>`).join('');
+document.getElementById('clients').innerHTML = window.PROJECTS.map(p => `<a class="client" href="_клиенты/${p.id}.html"><img src="${shot(p, 'desk')}" alt="Сайт ${esc(p.name)}" loading="lazy"><b>${esc(p.name)}</b><span>${esc(p.client)}, ${esc(p.city)}</span></a>`).join('');
+</script>
+</body>
+</html>

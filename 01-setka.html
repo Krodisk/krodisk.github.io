@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Денис Ковалёв, сетка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Швейцарская сетка на 12 колонок. Клавиша G показывает её поверх страницы красным, как layout grid в Figma */
+  :root {
+    --paper: #ffffff;
+    --ink: #000000;
+    --grey: #6b6b6b;
+    --rule: #e2e2e2;
+    --figma-red: rgba(255, 0, 0, .07);
+    --figma-line: rgba(255, 0, 0, .35);
+    --f: "Onest", "Helvetica Neue", Arial, sans-serif;
+    --gut: 24px;
+    --side: max(16px, 2.2vw);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font: 400 17px/1.5 var(--f); -webkit-font-smoothing: antialiased; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid #ff0000; outline-offset: 3px; }
+
+  .g { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gut); padding-inline: var(--side); }
+
+  /* оверлей сетки */
+  .grid-overlay { position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0; transition: opacity .25s; }
+  .grid-overlay .g { height: 100%; }
+  .grid-overlay span { background: var(--figma-red); border-inline: 1px solid var(--figma-line); }
+  body.show-grid .grid-overlay { opacity: 1; }
+
+  header.top { position: sticky; top: 0; z-index: 40; background: var(--paper); border-bottom: 1px solid var(--rule); }
+  header.top .g { align-items: center; height: 60px; font-weight: 500; }
+  header.top .name { grid-column: 1 / 4; }
+  header.top nav { grid-column: 6 / 11; display: flex; gap: 28px; color: var(--grey); }
+  header.top nav a { text-decoration: none; }
+  header.top nav a:hover { color: var(--ink); }
+  .gridbtn { grid-column: 11 / 13; justify-self: end; display: flex; align-items: center; gap: 8px; color: var(--grey); font-size: 15px; }
+  .gridbtn i { width: 30px; height: 18px; border-radius: 10px; background: var(--rule); position: relative; transition: background .2s; }
+  .gridbtn i::after { content: ""; position: absolute; left: 3px; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: transform .2s; }
+  body.show-grid .gridbtn i { background: #ff2a2a; }
+  body.show-grid .gridbtn i::after { transform: translateX(12px); }
+  kbd { font: inherit; border: 1px solid var(--rule); border-radius: 4px; padding: 0 5px; font-size: 13px; }
+
+  .hero { padding-block: 120px 100px; }
+  .hero h1 { grid-column: 1 / 11; font-weight: 500; font-size: clamp(38px, 5.6vw, 92px); line-height: 1.02; letter-spacing: -.035em; text-wrap: balance; }
+  .hero h1 span { color: var(--grey); }
+  .facts { grid-column: 1 / 13; display: grid; grid-template-columns: subgrid; margin-top: 90px; border-top: 1px solid var(--ink); padding-top: 14px; }
+  .facts div { grid-column: span 3; }
+  .facts dt { color: var(--grey); font-size: 15px; }
+  .facts dd { font-size: 22px; font-weight: 500; letter-spacing: -.01em; }
+
+  .work { padding-bottom: 60px; }
+  .work-head { padding-block: 40px 30px; align-items: end; }
+  .work-head h2 { grid-column: 1 / 7; font-size: 36px; font-weight: 500; letter-spacing: -.02em; }
+  .work-head p { grid-column: 7 / 13; color: var(--grey); max-width: 46ch; }
+
+  .proj { margin-bottom: 110px; cursor: pointer; }
+  .proj .media { display: grid; grid-template-columns: subgrid; align-items: end; }
+  .proj img { width: 100%; background: #f2f2f2; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .proj .desk { box-shadow: 0 0 0 1px var(--rule); }
+  .proj .mob { border-radius: 18px; box-shadow: 0 0 0 1px var(--rule); }
+  .proj:hover .desk { transform: translateY(-6px); }
+  .proj .cap { display: grid; grid-template-columns: subgrid; margin-top: 18px; align-items: baseline; }
+  .proj .cap h3 { grid-column: span 3; font-size: 22px; font-weight: 500; letter-spacing: -.01em; }
+  .proj .cap p { grid-column: span 5; color: var(--grey); }
+  .proj .cap .open { grid-column: span 3; text-align: right; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .proj .cap .yr { grid-column: span 1; text-align: right; color: var(--grey); font-variant-numeric: tabular-nums; }
+  .proj { grid-column: 1 / 13; display: grid; grid-template-columns: subgrid; }
+  .proj > * { grid-column: 1 / 13; }
+  /* шесть разных раскладок, чтобы ритм не повторялся */
+  .l1 .desk { grid-column: 1 / 10; } .l1 .mob { grid-column: 10 / 13; }
+  .l2 .desk { grid-column: 4 / 13; grid-row: 1; } .l2 .mob { grid-column: 1 / 4; grid-row: 1; }
+  .l3 .desk { grid-column: 1 / 13; }  .l3 .mob { display: none; }
+  .l4 .desk { grid-column: 3 / 11; } .l4 .mob { display: none; }
+  .l5 .desk { grid-column: 1 / 9; } .l5 .mob { grid-column: 9 / 12; }
+  .l6 .desk { grid-column: 5 / 13; } .l6 .mob { grid-column: 2 / 5; grid-row: 1; }
+
+  section.block { border-top: 1px solid var(--ink); padding-block: 22px 110px; }
+  section.block > .g > h2 { grid-column: 1 / 4; font-size: 17px; font-weight: 500; }
+  .about-text { grid-column: 4 / 11; }
+  .about-text p { font-size: 26px; line-height: 1.35; letter-spacing: -.012em; text-wrap: pretty; }
+  .about-text p + p { margin-top: .8em; }
+  .about-text .tools { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .about-text .tools span { border: 1px solid var(--ink); border-radius: 30px; padding: 4px 14px; font-size: 15px; }
+
+  .steps { grid-column: 4 / 13; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px var(--gut); list-style: none; counter-reset: s; }
+  .steps li { counter-increment: s; border-top: 1px solid var(--rule); padding-top: 14px; }
+  .steps li::before { content: counter(s); display: block; font-size: 64px; line-height: 1; font-weight: 500; letter-spacing: -.04em; margin-bottom: 20px; }
+  .steps b { font-weight: 500; display: block; margin-bottom: 4px; }
+  .steps p { color: var(--grey); font-size: 16px; }
+
+  .price { grid-column: 4 / 13; }
+  .price .row { display: grid; grid-template-columns: 2fr 3fr 1.4fr 1.2fr; gap: var(--gut); padding-block: 18px; border-bottom: 1px solid var(--rule); align-items: baseline; }
+  .price .row b { font-weight: 500; font-size: 20px; }
+  .price .row p { color: var(--grey); font-size: 16px; }
+  .price .row span { font-variant-numeric: tabular-nums; }
+  .price .row span:last-child { color: var(--grey); }
+
+  .contact .big { grid-column: 4 / 13; }
+  .mail { display: inline-flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
+  .mail a { font-size: clamp(32px, 5.4vw, 88px); font-weight: 500; letter-spacing: -.04em; text-decoration: none; line-height: 1; }
+  .mail button { border: 1px solid var(--ink); border-radius: 30px; padding: 6px 16px; font-size: 15px; }
+  .contact p { margin-top: 26px; color: var(--grey); max-width: 52ch; }
+  footer { border-top: 1px solid var(--rule); color: var(--grey); font-size: 14px; padding-block: 18px; }
+  footer .l { grid-column: 1 / 7; } footer .r { grid-column: 7 / 13; text-align: right; }
+
+  /* кейс */
+  .case { overscroll-behavior: contain; position: fixed; inset: 0; z-index: 60; background: var(--paper); overflow-y: auto; transform: translateY(100%); transition: transform .55s cubic-bezier(.7,0,.2,1); visibility: hidden; }
+  .case.open { transform: none; visibility: visible; }
+  .case-bar { position: sticky; top: 0; background: var(--paper); border-bottom: 1px solid var(--rule); z-index: 2; }
+  .case-bar .g { height: 60px; align-items: center; font-weight: 500; }
+  .case-bar .crumb { grid-column: 1 / 7; color: var(--grey); }
+  .case-bar .acts { grid-column: 7 / 13; justify-self: end; display: flex; gap: 24px; }
+  .case h1 { grid-column: 1 / 13; font-size: clamp(56px, 11vw, 180px); font-weight: 500; letter-spacing: -.05em; line-height: .9; padding-block: 70px 40px; }
+  .case .meta { grid-column: 1 / 13; display: grid; grid-template-columns: subgrid; border-top: 1px solid var(--ink); padding-top: 14px; margin-bottom: 70px; }
+  .case .meta div { grid-column: span 3; }
+  .case .meta dt { color: var(--grey); font-size: 15px; }
+  .case .meta dd { font-weight: 500; }
+  .case .problem { grid-column: 4 / 11; font-size: 28px; line-height: 1.3; letter-spacing: -.015em; margin-bottom: 70px; }
+  .case .frames { grid-column: 1 / 13; display: grid; grid-template-columns: subgrid; align-items: start; margin-bottom: 80px; }
+  .browser { grid-column: 1 / 10; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .browser .chrome { height: 34px; background: #f3f3f3; display: flex; align-items: center; gap: 6px; padding-inline: 12px; }
+  .browser .chrome i { width: 10px; height: 10px; border-radius: 50%; background: #d4d4d4; }
+  .browser .chrome span { margin-left: 16px; font-size: 13px; color: var(--grey); }
+  .browser .scroll { height: 72vh; overflow-y: auto; }
+  .phone { grid-column: 10 / 13; border: 8px solid #000; border-radius: 34px; overflow: hidden; }
+  .phone .scroll { height: 72vh; max-height: 640px; overflow-y: auto; scrollbar-width: none; }
+  .hint { grid-column: 1 / 13; color: var(--grey); font-size: 14px; margin-top: 10px; }
+  .case .did { grid-column: 4 / 11; list-style: none; margin-bottom: 70px; }
+  .case .did li { border-top: 1px solid var(--rule); padding-block: 16px; font-size: 19px; }
+  .case .res { grid-column: 1 / 13; display: grid; grid-template-columns: subgrid; border-top: 1px solid var(--ink); padding-top: 14px; margin-bottom: 70px; }
+  .case .res div { grid-column: span 4; }
+  .case .res b { display: block; font-size: clamp(48px, 6vw, 96px); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+  .case .res span { color: var(--grey); }
+  .case blockquote { grid-column: 4 / 11; font-size: 34px; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 20px; }
+  .case cite { grid-column: 4 / 11; color: var(--grey); font-style: normal; margin-bottom: 90px; }
+  .case .next { grid-column: 1 / 13; border-top: 1px solid var(--ink); padding-block: 20px 60px; display: flex; justify-content: space-between; align-items: baseline; font-size: 36px; font-weight: 500; letter-spacing: -.02em; text-align: left; }
+  .case .next small { font-size: 17px; color: var(--grey); font-weight: 400; letter-spacing: 0; }
+
+  @media (max-width: 860px) {
+    :root { --gut: 12px; }
+    .g { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-overlay span:nth-child(n+5) { display: none; }
+    header.top .name { grid-column: 1 / 3; }
+    header.top nav { display: none; }
+    .gridbtn { grid-column: 3 / 5; }
+    .gridbtn kbd { display: none; }
+    .hero { padding-block: 60px 50px; }
+    .hero h1, .work-head h2, .work-head p { grid-column: 1 / 5; }
+    .facts { grid-column: 1 / 5; margin-top: 50px; row-gap: 14px; }
+    .facts div { grid-column: span 2; }
+    .work-head p { margin-top: 10px; }
+    .proj { grid-column: 1 / 5; margin-bottom: 70px; }
+    .proj > *, .proj .cap h3, .proj .cap p { grid-column: 1 / 5; }
+    .proj .desk { grid-column: 1 / 5 !important; grid-row: 1 !important; }
+    .proj .mob { display: none !important; }
+    .proj .cap .open { grid-column: 1 / 4; text-align: left; margin-top: 6px; }
+    .proj .cap .yr { grid-column: 4 / 5; }
+    section.block > .g > h2, .about-text, .steps, .price, .contact .big { grid-column: 1 / 5; }
+    section.block > .g > h2 { margin-bottom: 24px; }
+    .about-text p { font-size: 21px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .price .row { grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+    .price .row p { grid-column: 1 / 3; grid-row: 2; }
+    footer .l, footer .r { grid-column: 1 / 5; text-align: left; }
+    .case h1 { grid-column: 1 / 5; padding-block: 40px 24px; }
+    .case .meta, .case .res { grid-column: 1 / 5; row-gap: 14px; }
+    .case .meta div { grid-column: span 2; }
+    .case .res div { grid-column: 1 / 5; }
+    .case .problem, .case .did, .case blockquote, .case cite, .case .next, .hint { grid-column: 1 / 5; }
+    .case .problem { font-size: 21px; }
+    .case blockquote { font-size: 24px; }
+    .case .frames { grid-column: 1 / 5; }
+    .browser { display: none; }
+    .phone { grid-column: 1 / 5; justify-self: center; width: min(320px, 100%); }
+    .case .next { font-size: 24px; flex-direction: column; gap: 4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .case, .proj img, .grid-overlay { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="grid-overlay" aria-hidden="true"><div class="g"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+
+<header class="top"><div class="g">
+  <a class="name" href="#top" style="text-decoration:none" id="dname"></a>
+  <nav><a href="#work">Работы</a><a href="#about">Обо мне</a><a href="#price">Цены</a><a href="#contact">Связаться</a></nav>
+  <button class="gridbtn" id="gridbtn" aria-pressed="false">Сетка <kbd>G</kbd><i></i></button>
+</div></header>
+
+<main id="top">
+  <section class="hero"><div class="g">
+    <h1>Делаю сайты для пекарен, клиник и прокатов. <span>Для всех, у кого нет своего отдела маркетинга.</span></h1>
+    <dl class="facts" id="facts"></dl>
+  </div></section>
+
+  <section class="work" id="work">
+    <div class="g work-head"><h2>Работы</h2><p>Шесть концептов. Компании вымышленные, задачи настоящие. У каждого есть разбор: что мешает такому бизнесу и как это решает сайт. Нажмите на любой.</p></div>
+    <div class="g" id="list"></div>
+  </section>
+
+  <section class="block" id="about"><div class="g">
+    <h2>Обо мне</h2>
+    <div class="about-text" id="about-text"></div>
+  </div></section>
+
+  <section class="block"><div class="g">
+    <h2>Как идёт работа</h2>
+    <ol class="steps" id="steps"></ol>
+  </div></section>
+
+  <section class="block" id="price"><div class="g">
+    <h2>Цены</h2>
+    <div class="price" id="services"></div>
+  </div></section>
+
+  <section class="block contact" id="contact"><div class="g">
+    <h2>Связаться</h2>
+    <div class="big">
+      <div class="mail"><a id="mail" href="#"></a><button id="copy">Скопировать</button></div>
+      <p id="contact-note"></p>
+    </div>
+  </div></section>
+</main>
+<footer><div class="g"><span class="l" id="foot-l"></span><span class="r">Сайт собран на сетке из 12 колонок. Нажмите G, чтобы её увидеть.</span></div></footer>
+
+<div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="case-title">
+  <div class="case-bar"><div class="g"><span class="crumb" id="case-crumb"></span><span class="acts"><button id="case-close">Закрыть, Esc</button></span></div></div>
+  <div class="g" id="case-body"></div>
+</div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+$('#dname').textContent = D.name;
+$('#facts').innerHTML = [
+  ['Город', D.city], ['Работы', P.length + ' концептов'], ['Делаю', 'сайты под ключ'], ['Свободен', 'с ' + D.windowFrom]
+].map(([t, v]) => `<div><dt>${t}</dt><dd>${v}</dd></div>`).join('');
+
+$('#list').innerHTML = P.map((p, i) => `
+  <article class="proj l${i + 1}" data-i="${i}" tabindex="0" role="button" aria-label="Открыть кейс ${esc(p.name)}">
+    <div class="media">
+      <img class="desk" src="${shot(p, 'desk')}" alt="Главный экран сайта ${esc(p.name)}" loading="lazy">
+      <img class="mob" src="${shot(p, 'mob')}" alt="Мобильная версия" loading="lazy">
+    </div>
+    <div class="cap"><h3>${esc(p.name)}</h3><p>${esc(p.client)}, ${esc(p.city)}. ${esc(p.short)}</p><span class="open">Открыть кейс</span><span class="yr">${p.year}</span></div>
+  </article>`).join('');
+
+$('#about-text').innerHTML = D.about.map(t => `<p>${esc(t)}</p>`).join('') + `<div class="tools">${D.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>`;
+$('#steps').innerHTML = D.process.map(s => `<li><b>${esc(s.name)}</b><p>${esc(s.text)}</p></li>`).join('');
+$('#services').innerHTML = D.services.map(s => `<div class="row"><b>${esc(s.name)}</b><p>${esc(s.text)}</p><span>${esc(s.price)}</span><span>${esc(s.time)}</span></div>`).join('');
+$('#mail').textContent = D.email; $('#mail').href = 'mailto:' + D.email;
+$('#contact-note').textContent = `Или в телеграм ${D.telegram}. Напишите пару строк о том, чем вы занимаетесь и что не так с нынешним сайтом. Отвечаю в течение дня.`;
+$('#foot-l').textContent = `${D.name}, ${D.city}, ${new Date().getFullYear()}`;
+
+$('#copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено, нажмите Ctrl+C'; }
+  setTimeout(() => e.target.textContent = 'Скопировать', 2200);
+});
+
+/* сетка */
+const toggleGrid = () => {
+  const on = document.body.classList.toggle('show-grid');
+  $('#gridbtn').setAttribute('aria-pressed', on);
+};
+$('#gridbtn').addEventListener('click', toggleGrid);
+addEventListener('keydown', e => {
+  if (e.target.closest('input, textarea')) return;
+  if (e.key === 'g' || e.key === 'G' || e.key === 'п' || e.key === 'П') toggleGrid();
+  if (e.key === 'Escape') closeCase();
+});
+
+/* кейс */
+const caseEl = $('#case');
+let lastFocus = null;
+function openCase(i) {
+  const p = P[i], n = P[(i + 1) % P.length];
+  lastFocus = document.activeElement;
+  $('#case-crumb').textContent = `Работы / ${p.name}`;
+  $('#case-body').innerHTML = `
+    <h1 id="case-title">${esc(p.name)}</h1>
+    <dl class="meta"><div><dt>Для кого</dt><dd>${esc(p.client)}, ${esc(p.city)}</dd></div><div><dt>Год</dt><dd>${p.year}</dd></div><div><dt>Что делал</dt><dd>${esc(p.kind)}</dd></div><div><dt>Инструменты</dt><dd>${esc(p.tools)}</dd></div></dl>
+    <p class="problem">${esc(p.problem)}</p>
+    <div class="frames">
+      <div class="browser"><div class="chrome"><i></i><i></i><i></i><span>${p.id}.ru</span></div><div class="scroll"><img src="${shot(p, 'full')}" alt="Вся страница сайта ${esc(p.name)}"></div></div>
+      <div class="phone"><div class="scroll"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия целиком"></div></div>
+      <p class="hint">Обе страницы прокручиваются внутри рамок.</p>
+    </div>
+    <ul class="did">${p.did.map(t => `<li>${esc(t)}</li>`).join('')}</ul>
+    <div class="res">${p.result.map(([a, b]) => `<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>
+    <blockquote>«${esc(p.quote)}»</blockquote><cite>${esc(p.quoteBy)}</cite>
+    <button class="next" data-next="${(i + 1) % P.length}"><span>${esc(n.name)}</span><small>Следующий кейс</small></button>`;
+  caseEl.scrollTop = 0;
+  caseEl.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  history.replaceState(null, '', '#' + p.id);
+  $('#case-close').focus({ preventScroll: true });
+}
+function closeCase() {
+  if (!caseEl.classList.contains('open')) return;
+  caseEl.classList.remove('open');
+  document.body.style.overflow = '';
+  history.replaceState(null, '', location.pathname);
+  lastFocus && lastFocus.focus({ preventScroll: true });
+}
+$('#case-close').addEventListener('click', closeCase);
+caseEl.addEventListener('click', e => { const b = e.target.closest('[data-next]'); if (b) openCase(+b.dataset.next); });
+document.querySelectorAll('.proj').forEach(el => {
+  el.addEventListener('click', () => openCase(+el.dataset.i));
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCase(+el.dataset.i); } });
+});
+const fromHash = P.findIndex(p => '#' + p.id === location.hash);
+if (fromHash >= 0) openCase(fromHash);
+</script>
+</body>
+</html>

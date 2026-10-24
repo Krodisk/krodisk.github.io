@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Журнал «Ковалёв»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Глянцевый журнал: обложка, содержание, письмо редактора и развороты, где каждый проект подан как статья */
+  :root {
+    --paper: #ffffff;
+    --ink: #141414;
+    --emerald: #0e5a45;
+    --blush: #f3e4dc;
+    --soft: #6a6a66;
+    --rule: #dcdcd6;
+    --mast: "Yeseva One", Georgia, serif;
+    --serif: "Literata", Georgia, serif;
+    --sans: "Golos Text", "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #e8e7e2; color: var(--ink); font: 400 18px/1.6 var(--serif); }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--emerald); outline-offset: 3px; }
+
+  .spread { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; background: var(--paper); position: relative; border-bottom: 14px solid #e8e7e2; }
+  .spread::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 60px; transform: translateX(-50%); pointer-events: none; background: linear-gradient(90deg, transparent, rgba(0,0,0,.07) 45%, rgba(0,0,0,.12) 50%, rgba(0,0,0,.07) 55%, transparent); }
+  .page { position: relative; padding: 60px 56px 80px; min-width: 0; }
+  .runhead { position: absolute; top: 24px; left: 56px; right: 56px; display: flex; justify-content: space-between; font: 500 12px var(--sans); color: var(--soft); }
+  .folio { position: absolute; bottom: 26px; font: 600 13px var(--sans); }
+  .page.l .folio { left: 56px; } .page.r .folio { right: 56px; }
+
+  /* обложка */
+  .cover { position: relative; min-height: 100vh; background: #1f2b2a; color: #fff; overflow: hidden; border-bottom: 14px solid #e8e7e2; }
+  .cover > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.5), rgba(0,0,0,0) 45%), linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,0) 35%, rgba(0,0,0,0) 60%, rgba(0,0,0,.55)); }
+  .cover .in { position: relative; z-index: 1; min-height: 100vh; padding: 3vh 4vw 4vh; display: grid; grid-template-rows: auto 1fr auto; }
+  .mast { font: 400 clamp(64px, 18vw, 320px)/.8 var(--mast); letter-spacing: -.02em; text-align: center; }
+  .issue { display: flex; justify-content: space-between; font: 500 14px var(--sans); margin-top: 1.4vh; }
+  .lines { align-self: center; max-width: 360px; display: grid; gap: 22px; }
+  .lines p { font: 400 26px/1.1 var(--mast); }
+  .lines p { text-shadow: 0 1px 12px rgba(0,0,0,.5); } .lines p small { display: block; font: 400 15px/1.35 var(--sans); margin-top: 6px; opacity: .9; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+  .cover .big { font: 400 clamp(34px, 4.6vw, 72px)/.95 var(--mast); max-width: 12ch; }
+  .barcode { background: #fff; color: #000; padding: 8px 10px 6px; font: 11px var(--sans); text-align: center; }
+  .barcode svg { width: 120px; height: 46px; display: block; }
+
+  /* содержание и письмо */
+  .toc h2, .letter h2, .ad h2 { font: 400 64px/1 var(--mast); margin: 30px 0 30px; }
+  .toc ol { list-style: none; }
+  .toc li { border-top: 1px solid var(--rule); }
+  .toc a { display: grid; grid-template-columns: 48px 1fr auto; gap: 16px; padding: 14px 0; text-decoration: none; align-items: baseline; }
+  .toc a:hover b { color: var(--emerald); }
+  .toc a span:first-child { font: 600 14px var(--sans); color: var(--emerald); }
+  .toc b { font: 400 28px/1.1 var(--mast); }
+  .toc small { display: block; font: 400 15px var(--serif); color: var(--soft); margin-top: 2px; }
+  .toc .pg { font: 600 14px var(--sans); }
+  .letter p { margin-bottom: 1em; max-width: 36em; }
+  .letter p:first-of-type::first-letter { float: left; font: 400 92px/.8 var(--mast); padding: 8px 10px 0 0; color: var(--emerald); }
+  .sign { font: italic 400 26px var(--serif); margin-top: 30px; }
+  .letter .photo { margin: -60px -56px 40px; height: 46vh; }
+  .letter .photo img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* развороты */
+  .bleed { padding: 0; background: var(--tint, var(--blush)); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .bleed > img.main { width: 84%; height: auto; box-shadow: 0 40px 60px -30px rgba(0,0,0,.45); margin-bottom: 8%; }
+  .bleed .cap { position: absolute; left: 24px; bottom: 24px; right: 24px; background: rgba(255,255,255,.94); padding: 10px 14px; font: 400 14px/1.45 var(--sans); max-width: 380px; }
+  .bleed .phone { position: absolute; right: 5%; bottom: 9%; width: 20%; border: 7px solid #111; border-radius: 26px; overflow: hidden; box-shadow: 0 30px 50px -20px rgba(0,0,0,.55); }
+  .kicker { font: 600 14px var(--sans); color: var(--emerald); margin-top: 26px; }
+  .story h2 { font: 400 clamp(52px, 5.6vw, 92px)/.95 var(--mast); margin: 12px 0 22px; text-wrap: balance; }
+  .standfirst { font: italic 400 23px/1.4 var(--serif); margin-bottom: 28px; max-width: 30em; }
+  .cols { columns: 2; column-gap: 34px; font-size: 17px; text-align: left; hyphens: auto; }
+  .cols p { margin-bottom: .9em; }
+  .cols > p:first-child::first-letter { float: left; font: 400 72px/.8 var(--mast); padding: 6px 8px 0 0; color: var(--emerald); }
+  .pull { font: 400 30px/1.15 var(--mast); color: var(--emerald); border-top: 3px solid var(--emerald); border-bottom: 1px solid var(--emerald); padding: 16px 0; margin: 10px 0 18px; break-inside: avoid; text-align: left; }
+  .pull small { display: block; font: 400 14px var(--sans); color: var(--soft); margin-top: 8px; }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; background: var(--blush); padding: 20px 22px; }
+  .facts b { display: block; font: 400 38px/1 var(--mast); }
+  .facts span { font: 400 14px/1.35 var(--sans); }
+  .more { margin-top: 24px; font: 600 15px var(--sans); border: 1.5px solid var(--ink); border-radius: 40px; padding: 10px 20px; }
+  .more:hover { background: var(--ink); color: #fff; }
+  .spread.flip .bleed { order: 2; }
+  .spread.flip .story { order: 1; }
+
+  /* реклама и задняя обложка */
+  .ad .box { border: 3px double var(--ink); padding: 34px; height: 100%; }
+  .ad .item { display: grid; grid-template-columns: 1fr auto; gap: 8px 20px; padding: 18px 0; border-top: 1px solid var(--rule); }
+  .ad .item b { font: 400 28px var(--mast); }
+  .ad .item em { font: 600 20px var(--sans); font-style: normal; color: var(--emerald); white-space: nowrap; }
+  .ad .item p { grid-column: 1 / 3; font-size: 16px; color: var(--soft); }
+  .steps { list-style: none; counter-reset: s; display: grid; grid-template-columns: 1fr 1fr; gap: 18px 30px; }
+  .steps li { counter-increment: s; font-size: 16px; }
+  .steps li::before { content: counter(s); font: 400 44px/1 var(--mast); color: var(--emerald); display: block; }
+  .steps b { font-family: var(--sans); font-weight: 600; }
+  .back { background: var(--emerald); color: #fff; display: flex; flex-direction: column; justify-content: center; }
+  .back h2 { font: 400 clamp(48px, 6vw, 96px)/.95 var(--mast); }
+  .back .mail { font: 400 clamp(26px, 3vw, 44px) var(--mast); margin: 30px 0 10px; word-break: break-all; }
+  .back p { font-family: var(--sans); opacity: .9; }
+  .back button { margin-top: 20px; align-self: flex-start; border: 1.5px solid #fff; border-radius: 40px; padding: 10px 20px; font: 600 15px var(--sans); }
+
+  /* просмотр сайта */
+  .viewer { overscroll-behavior: contain; position: fixed; inset: 0; z-index: 50; background: rgba(15, 20, 18, .92); display: none; padding: 24px; }
+  .viewer.open { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+  .viewer .scr { overflow-y: auto; background: #fff; }
+  .viewer .ph { overflow-y: auto; border: 8px solid #000; border-radius: 30px; background: #fff; max-height: 92vh; scrollbar-width: none; align-self: center; }
+  .viewer .x { position: absolute; top: 14px; right: 14px; background: #fff; border-radius: 30px; padding: 6px 16px; font: 600 15px var(--sans); z-index: 2; }
+
+  @media (max-width: 900px) {
+    .spread { grid-template-columns: 1fr; min-height: 0; }
+    .spread::after { display: none; }
+    .page { padding: 50px 18px 60px; }
+    .runhead { left: 18px; right: 18px; }
+    .page.l .folio { left: 18px; } .page.r .folio { right: 18px; }
+    .bleed { min-height: 62vh; }
+    .spread.flip .bleed { order: 0; }
+    .cols { columns: 1; }
+    .facts { grid-template-columns: 1fr; }
+    .lines { display: none; }
+    .letter .photo { margin: -50px -18px 30px; }
+    .steps { grid-template-columns: 1fr; }
+    .viewer.open { grid-template-columns: 1fr; padding: 56px 16px 16px; }
+    .viewer .scr { display: none; }
+    .viewer .ph { width: min(320px, 100%); justify-self: center; max-height: 82vh; }
+  }
+</style>
+</head>
+<body>
+<header class="cover" id="cover"></header>
+<section class="spread" id="toc-spread"></section>
+<main id="stories"></main>
+<section class="spread" id="last"></section>
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Сайт целиком"></div>
+
+<script src="shared/projects.js"></script>
+<script>
+const D = window.DESIGNER, P = window.PROJECTS;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ISSUE = 'Выпуск 1, осень 2026';
+const TITLES = {
+  opara: ['Батон по записи', 'Концепт сайта, где хлеб можно отложить на завтра'],
+  zubr: ['День на ресепшене', 'Как уложить запись к стоматологу в три шага'],
+  tihiy: ['Сайт для трассы', 'Прокат лодок, который открывается там, где ловит через раз'],
+  plenka: ['Программа без бумаги', 'Сорок восемь фильмов, три зала и одна сетка'],
+  suharev: ['Без весов', 'Юристы, которые показывают проигранные дела'],
+  sherst: ['Серый картон', 'Как показать цвет пряжи так, чтобы её не возвращали']
+};
+const runhead = n => `<div class="runhead"><span>Ковалёв</span><span>${ISSUE}</span></div>`;
+
+/* обложка */
+const bars = Array.from({ length: 46 }, (_, i) => { const w = [1, 2, 1, 3, 1, 2][i % 6]; return w; });
+let bx = 0; const barSvg = bars.map((w, i) => { const r = i % 2 ? '' : `<rect x="${bx}" y="0" width="${w}" height="46" fill="#000"/>`; bx += w + 1; return r; }).join('');
+$('#cover').innerHTML = `<img src="_клиенты/photos/tihiy-2.jpg" alt="Остров на Онежском озере, фото из проекта «Тихий ход»"><div class="in">
+  <div><h1 class="mast">Ковалёв</h1><div class="issue"><span>${ISSUE}</span><span>Журнал о сайтах для малого дела</span><span>Бесплатно</span></div></div>
+  <div class="lines">${P.slice(0, 3).map(p => `<p>${TITLES[p.id][0]}<small>${esc(TITLES[p.id][1])}</small></p>`).join('')}</div>
+  <div class="bottom"><p class="big">Шесть концептов для малого дела</p><div class="barcode"><svg viewBox="0 0 ${bx} 46" preserveAspectRatio="none" aria-hidden="true">${barSvg}</svg>4 607001 260062</div></div>
+</div>`;
+
+/* содержание и письмо редактора */
+$('#toc-spread').innerHTML = `<div class="page l toc">${runhead()}<h2>В номере</h2><ol>${P.map((p, i) => `<li><a href="#s-${p.id}"><span>${p.year}</span><span><b>${TITLES[p.id][0]}</b><small>${esc(p.client)}, ${esc(p.city)}</small></span><span class="pg">${String(6 + i * 2).padStart(2, '0')}</span></a></li>`).join('')}
+  <li><a href="#last"><span>&nbsp;</span><span><b>Объявления</b><small>Цены, сроки и как связаться</small></span><span class="pg">18</span></a></li></ol><span class="folio">02</span></div>
+  <div class="page r letter">${runhead()}<div class="photo"><img src="img/desk-notes.jpg" alt="Рабочий стол с блокнотом и ноутбуком"></div><h2>Письмо редактора</h2>${D.about.map(t => `<p>${esc(t)}</p>`).join('')}<p class="sign">${esc(D.name)}, ${esc(D.city)}</p><span class="folio">03</span></div>`;
+
+/* истории */
+$('#stories').innerHTML = P.map((p, i) => {
+  const [title, sub] = TITLES[p.id];
+  const half = Math.ceil(p.did.length / 2);
+  return `<section class="spread ${i % 2 ? 'flip' : ''}" id="s-${p.id}">
+    <div class="page bleed ${i % 2 ? 'r' : 'l'}" style="--tint:${p.tint}"><img class="main" src="${shot(p, 'desk')}" alt="Главный экран сайта ${esc(p.name)}" loading="lazy"><img class="phone" src="${shot(p, 'mob')}" alt="Мобильная версия" loading="lazy"><p class="cap">Главная страница сайта «${esc(p.name)}». ${esc(p.kind)}, ${esc(p.tools)}.</p><span class="folio">${String(6 + i * 2).padStart(2, '0')}</span></div>
+    <article class="page story ${i % 2 ? 'l' : 'r'}">${runhead()}
+      <p class="kicker">${esc(p.client)}, ${esc(p.city)}, ${p.year}</p>
+      <h2>${title}</h2>
+      <p class="standfirst">${esc(sub)}.</p>
+      <div class="cols"><p>${esc(p.problem)}</p>${p.did.slice(0, half).map(t => `<p>${esc(t)}</p>`).join('')}
+        <p class="pull">«${esc(p.quote)}»<small>${esc(p.quoteBy)}</small></p>${p.did.slice(half).map(t => `<p>${esc(t)}</p>`).join('')}</div>
+      <div class="facts">${p.result.map(([a, b]) => `<div><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>
+      <button class="more" data-v="${i}">Посмотреть сайт целиком</button>
+      <span class="folio">${String(7 + i * 2).padStart(2, '0')}</span></article>
+  </section>`;
+}).join('');
+
+/* объявления и задняя обложка */
+$('#last').innerHTML = `<div class="page l ad">${runhead()}<div class="box"><h2>Объявления</h2>${D.services.map(s => `<div class="item"><b>${esc(s.name)}</b><em>${esc(s.price)}</em><p>${esc(s.text)} Срок: ${esc(s.time)}.</p></div>`).join('')}
+  <h2 style="font-size:36px;margin-top:40px">Как идёт работа</h2><ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ol></div><span class="folio">18</span></div>
+  <div class="page r back"><h2>Следующий номер можете сделать вы</h2><p class="mail" id="mail">${esc(D.email)}</p><p>Телеграм ${esc(D.telegram)}. Свободен с ${esc(D.windowFrom)}. Отвечаю в течение дня.</p><button id="copy">Скопировать почту</button><span class="folio">19</span></div>`;
+$('#copy').addEventListener('click', async e => {
+  try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
+  catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено'; }
+  setTimeout(() => e.target.textContent = 'Скопировать почту', 2200);
+});
+
+/* просмотр */
+const viewer = $('#viewer');
+let lastFocus;
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-v]');
+  if (b) {
+    const p = P[+b.dataset.v]; lastFocus = b;
+    viewer.innerHTML = `<button class="x" id="vx">Закрыть</button><div class="scr" tabindex="0" aria-label="Вся страница"><img src="${shot(p, 'full')}" alt="Сайт ${esc(p.name)} целиком"></div><div class="ph" tabindex="0" aria-label="Телефон"><img src="${shot(p, 'mobfull')}" alt="Мобильная версия"></div>`;
+    viewer.classList.add('open'); document.body.style.overflow = 'hidden'; $('#vx').focus();
+  }
+  if (e.target.id === 'vx' || e.target === viewer) closeV();
+});
+function closeV() { viewer.classList.remove('open'); document.body.style.overflow = ''; lastFocus && lastFocus.focus(); }
+addEventListener('keydown', e => { if (e.key === 'Escape' && viewer.classList.contains('open')) closeV(); });
+</script>
+</body>
+</html>
