@@ -162,4 +162,4 @@ window.PROJECTS = [
 ];
 
 // Пути к картинкам проекта относительно корня портфолио
-window.shot = (p, kind) => `img/${p.id}-${kind}.jpg`;
+window.shot = (p, kind) => `img/${p.id}-${kind}.jpg?v=3`;

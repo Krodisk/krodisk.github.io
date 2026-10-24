@@ -79,7 +79,7 @@ const SITES = [
   ['10-rizograf', 'Ризограф', 'Зин в две краски со сдвигом и растровыми картинками.']
 ];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-document.getElementById('grid').innerHTML = SITES.map(([f, t, d], i) => `<a class="item" href="${f}.html"><div class="shot"><img src="img/hub/${f}.jpg" alt="Первый экран версии «${t}»" loading="lazy"></div><div class="cap"><span>${String(i + 1).padStart(2, '0')}</span><div><h2>${t}</h2><p>${d}</p></div></div></a>`).join('');
+document.getElementById('grid').innerHTML = SITES.map(([f, t, d], i) => `<a class="item" href="${f}.html"><div class="shot"><img src="img/hub/${f}.jpg?v=3" alt="Первый экран версии «${t}»" loading="lazy"></div><div class="cap"><span>${String(i + 1).padStart(2, '0')}</span><div><h2>${t}</h2><p>${d}</p></div></div></a>`).join('');
 document.getElementById('clients').innerHTML = window.PROJECTS.map(p => `<a class="client" href="_клиенты/${p.id}.html"><img src="${shot(p, 'desk')}" alt="Сайт ${esc(p.name)}" loading="lazy"><b>${esc(p.name)}</b><span>${esc(p.client)}, ${esc(p.city)}</span></a>`).join('');
 </script>
 </body>
