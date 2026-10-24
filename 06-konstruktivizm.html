@@ -184,7 +184,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 $('#vname').textContent = D.last;
 $('#first').innerHTML = esc(D.first) + '<br>веб-дизайн';
 $('#hero-img').innerHTML = `<img src="${shot(P[0], 'desk')}" alt="">`;
-$('#facts').textContent = `${D.city}. Шесть концептов сайтов для малого дела. Свободен с ${D.windowFrom}.`;
+$('#facts').textContent = `${D.city}. Шесть концептов сайтов для малого дела.`;
 
 $('#works').innerHTML = P.map((p, i) => {
   const img = `<div class="duo"><img src="${shot(p, 'desk')}" alt="Сайт ${esc(p.name)}" loading="lazy"></div>`;

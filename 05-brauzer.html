@@ -174,7 +174,7 @@ function renderHome() {
     <ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}</b>${esc(s.text)}</li>`).join('')}</ol>
     <h2>Написать</h2>
     <div class="mail"><span id="mail">${esc(D.email)}</span><button id="copy">Скопировать</button></div>
-    <p style="color:var(--soft);margin-top:10px">Телеграм ${esc(D.telegram)}. Свободен с ${esc(D.windowFrom)}.</p>
+    <p style="color:var(--soft);margin-top:10px">Телеграм ${esc(D.telegram)}.</p>
   </div>`;
   pane.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => show(b.dataset.open)));
   $('#copy').addEventListener('click', async e => {

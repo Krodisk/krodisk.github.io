@@ -124,7 +124,7 @@
 </head>
 <body>
 <div class="wrap">
-  <header class="top"><span id="dname"></span><nav><a href="#work">Работы</a><a href="#about">Обо мне</a><a href="#price">Цены</a><a href="#contact">Почта</a></nav><span class="badge" id="badge"></span></header>
+  <header class="top"><span id="dname"></span><nav><a href="#work">Работы</a><a href="#about">Обо мне</a><a href="#price">Цены</a><a href="#contact">Почта</a></nav><a class="badge" id="badge" target="_blank" rel="noopener"></a></header>
 
   <section class="hero" aria-label="Кто я">
     <h1>Делаю сайты для<span class="slot" id="slot" aria-live="polite"><span>пекарен</span></span></h1>
@@ -170,7 +170,7 @@ const PHOTO = { opara: 'opara-hero', zubr: 'zubr-doc1', tihiy: 'tihiy-2', plenka
 const WHO = { opara: 'пекарен', zubr: 'клиник', tihiy: 'прокатов', plenka: 'фестивалей', suharev: 'юристов', sherst: 'магазинов' };
 
 $('#dname').textContent = D.name;
-$('#badge').textContent = 'Свободен с ' + D.windowFrom;
+$("#badge").textContent = "Написать в телеграм"; $("#badge").href = "https://t.me/" + D.telegram.slice(1);
 $('#lead').textContent = `${D.city}. Ниже шесть концептов, каждый можно раскрыть и прочитать целиком.`;
 $('#foot').textContent = `${D.name}, ${new Date().getFullYear()}`;
 

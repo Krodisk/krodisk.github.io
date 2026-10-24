@@ -177,7 +177,7 @@ rooms.forEach(r => {
   html += `<section class="wall room" id="${r.id}"><h2 class="room-title"><small>Зал ${r.num}</small>${r.title}</h2>${piece(a, 120)}${piece(b, 1110, true)}</section><div class="wall door"></div>`;
 });
 html += `<section class="wall text-wall" id="author"><h2>Об авторе</h2><div class="cols">${D.about.map(t => `<p>${esc(t)}</p>`).join('')}<p>Работает в ${D.tools.join(', ')}.</p></div><ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ol></section><div class="wall door"></div>`;
-html += `<section class="wall shop" id="shop"><h2>Музейный магазин</h2><p>Здесь можно заказать такую же работу для себя. Свободное окно: ${esc(D.window)}.</p><div class="shelf">${D.services.map(s => `<div class="tag"><b>${esc(s.name)}</b><p class="pr">${esc(s.price)}</p><p>${esc(s.time)}. ${esc(s.text)}</p></div>`).join('')}</div>
+html += `<section class="wall shop" id="shop"><h2>Музейный магазин</h2><p>Здесь можно заказать такую же работу для себя.</p><div class="shelf">${D.services.map(s => `<div class="tag"><b>${esc(s.name)}</b><p class="pr">${esc(s.price)}</p><p>${esc(s.time)}. ${esc(s.text)}</p></div>`).join('')}</div>
   <div class="guest"><div class="book"><small>Книга отзывов и предложений</small><b id="mail">${esc(D.email)}</b><small>телеграм ${esc(D.telegram)}</small></div><button id="copy">Скопировать почту</button></div></section>`;
 $('#track').innerHTML = html;
 

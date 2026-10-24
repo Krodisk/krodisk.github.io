@@ -149,7 +149,7 @@
       <label for="f-text">Что сейчас мешает</label><textarea id="f-text" name="message" autocomplete="off"></textarea>
       <div class="acts"><button class="primary" id="f-send">Открыть письмо с запросом</button><button id="f-copy">Скопировать адрес</button></div>
       <p class="out" id="f-out" role="status"></p>
-    </div><div><p>Запросы принимаются по почте <b id="mail"></b> и в телеграме <b id="tg"></b>.</p><p style="margin-top:1em">Ответ в течение рабочего дня. Ближайшее свободное окно: <b id="win"></b>.</p></div></div>
+    </div><div><p>Запросы принимаются по почте <b id="mail"></b> и в телеграме <b id="tg"></b>.</p><p style="margin-top:1em">Ответ в течение рабочего дня.</p></div></div>
   </div></section>
   <footer id="foot"></footer>
 </div>
@@ -188,7 +188,7 @@ renderCards(0);
 $('#about-text').innerHTML = D.about.map(t => `<p>${esc(t)}</p>`).join('') + `<p>Инструменты: ${esc(D.tools.join(', '))}.</p>`;
 $('#steps').innerHTML = D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('');
 $('#price').innerHTML = D.services.map(s => `<tr><td><b>${esc(s.name)}</b><br><small>${esc(s.text)} Срок: ${esc(s.time)}.</small></td><td>${esc(s.price)}</td></tr>`).join('');
-$('#mail').textContent = D.email; $('#tg').textContent = D.telegram; $('#win').textContent = D.window;
+$('#mail').textContent = D.email; $('#tg').textContent = D.telegram;
 $('#foot').textContent = `Фонд открыт для запросов. ${D.name}, ${new Date().getFullYear()}.`;
 
 $('#f-send').addEventListener('click', () => {

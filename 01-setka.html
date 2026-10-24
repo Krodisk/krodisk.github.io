@@ -247,7 +247,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;',
 
 $('#dname').textContent = D.name;
 $('#facts').innerHTML = [
-  ['Город', D.city], ['Работы', P.length + ' концептов'], ['Делаю', 'сайты под ключ'], ['Свободен', 'с ' + D.windowFrom]
+  ['Город', D.city], ['Работы', P.length + ' концептов'], ['Делаю', 'сайты под ключ'], ['Связь', D.telegram]
 ].map(([t, v]) => `<div><dt>${t}</dt><dd>${v}</dd></div>`).join('');
 
 $('#list').innerHTML = P.map((p, i) => `

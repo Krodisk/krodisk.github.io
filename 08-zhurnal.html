@@ -187,7 +187,7 @@ $('#stories').innerHTML = P.map((p, i) => {
 /* объявления и задняя обложка */
 $('#last').innerHTML = `<div class="page l ad">${runhead()}<div class="box"><h2>Объявления</h2>${D.services.map(s => `<div class="item"><b>${esc(s.name)}</b><em>${esc(s.price)}</em><p>${esc(s.text)} Срок: ${esc(s.time)}.</p></div>`).join('')}
   <h2 style="font-size:36px;margin-top:40px">Как идёт работа</h2><ol class="steps">${D.process.map(s => `<li><b>${esc(s.name)}.</b> ${esc(s.text)}</li>`).join('')}</ol></div><span class="folio">18</span></div>
-  <div class="page r back"><h2>Следующий номер можете сделать вы</h2><p class="mail" id="mail">${esc(D.email)}</p><p>Телеграм ${esc(D.telegram)}. Свободен с ${esc(D.windowFrom)}. Отвечаю в течение дня.</p><button id="copy">Скопировать почту</button><span class="folio">19</span></div>`;
+  <div class="page r back"><h2>Следующий номер можете сделать вы</h2><p class="mail" id="mail">${esc(D.email)}</p><p>Телеграм ${esc(D.telegram)}. Отвечаю в течение дня.</p><button id="copy">Скопировать почту</button><span class="folio">19</span></div>`;
 $('#copy').addEventListener('click', async e => {
   try { await navigator.clipboard.writeText(D.email); e.target.textContent = 'Скопировано'; }
   catch { getSelection().selectAllChildren($('#mail')); e.target.textContent = 'Выделено'; }

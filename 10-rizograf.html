@@ -159,7 +159,7 @@ let html = `<section class="sheet cover">${staples}
   <div class="tiny"><span>Зин о сайтах для малого дела</span><span>Выпуск 1, тираж 40 экземпляров</span></div>
   <div class="riso art"><img src="${shot(P[3], 'desk')}" alt=""></div>
   ${ov(D.last, 'h1')}
-  <div class="bot"><p>${esc(D.first)} делает сайты для пекарен, клиник, прокатов и фестивалей. ${esc(D.city)}. Внутри шесть концептов.</p><span class="sticker">Свободен<br>с ${esc(D.windowFrom)}</span></div>${pn()}</section>`;
+  <div class="bot"><p>${esc(D.first)} делает сайты для пекарен, клиник, прокатов и фестивалей. ${esc(D.city)}. Внутри шесть концептов.</p><span class="sticker">Сайты<br>под ключ</span></div>${pn()}</section>`;
 
 html += `<section class="sheet toc">${ov('Внутри', 'h2')}<ol>${P.map((p, i) => `<li><a href="#${p.id}"><b>${esc(p.name)}</b><span>${esc(p.client.toLowerCase())}, ${esc(p.city)}, стр. ${i + 3}</span></a></li>`).join('')}<li><a href="#me"><b>Кто это делает</b><span>стр. 9</span></a></li><li><a href="#coupons"><b>Купоны</b><span>цены, стр. 10</span></a></li></ol>${pn()}</section>`;
 
