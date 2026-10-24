@@ -52,7 +52,7 @@
   .icard::after { content: ""; position: absolute; left: 50%; bottom: 10px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--card); box-shadow: inset 0 1px 2px rgba(0,0,0,.35); }
   .icard .code { display: flex; justify-content: space-between; font-size: 13px; }
   .icard h3 { font: 700 28px/1 var(--head); margin-top: 12px; }
-  .icard dl { display: grid; grid-template-columns: auto 1fr; gap: 0 10px; font-size: 13.5px; line-height: 24px; margin-top: 4px; }
+  .icard dl { display: grid; grid-template-columns: auto 1fr; gap: 0 10px; font-size: 13.5px; line-height: 24px; margin-top: 4px; padding-right: calc(34% + 16px); }
   .icard dt { color: var(--soft); }
   .icard .thumb { position: absolute; right: 20px; top: 60px; width: 34%; transform: rotate(3deg); box-shadow: 0 6px 10px -4px rgba(0,0,0,.4); border: 4px solid #fff; }
   .icard .thumb::before { content: ""; position: absolute; top: -14px; left: 18px; width: 12px; height: 34px; border: 2px solid #8b8f94; border-radius: 6px; }
@@ -115,8 +115,9 @@
     .drawer { padding: 16px; }
     .icard { aspect-ratio: auto; min-height: 260px; padding-bottom: 40px; }
     .icard .thumb { position: static; width: 70%; margin: 10px 0 6px; transform: rotate(1.5deg); }
-    .icard dl { margin-right: 0; }
+    .icard dl { margin-right: 0; padding-right: 0; }
     .sheet { padding: 30px 18px; }
+    .sheet .num { position: static; display: block; margin-bottom: 6px; }
     .shade { padding: 10px; }
     .folder { padding: 20px 14px; }
     .folder .cover { flex-direction: column; align-items: flex-start; }

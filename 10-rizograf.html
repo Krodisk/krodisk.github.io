@@ -73,11 +73,11 @@
   /* страницы проектов */
   .proj { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: start; }
   .proj.flip { grid-template-columns: 1fr 1.25fr; }
-  .proj.flip .pics { order: 2; }
+  .proj.flip .pics { grid-column: 2; grid-row: 1; }
   .pics { position: relative; }
   .pics .main { aspect-ratio: 16 / 10; }
   .pics .mob { position: absolute; width: 30%; aspect-ratio: 9 / 19; right: -14px; bottom: -40px; border: 4px solid var(--paper); }
-  .pics .hint { font-size: 14px; margin-top: 52px; }
+  .pics .hint { font-size: 14px; margin-top: 52px; padding-right: calc(30% + 8px); }
   .proj .k { font-weight: 700; color: var(--pink); }
   .proj h2 { font-size: clamp(54px, 7vw, 104px); margin: 10px 0 20px; }
   .proj .problem { color: var(--ink); font-size: 19px; }
@@ -127,8 +127,10 @@
     .cover .art { width: 80%; right: -24%; top: 36%; opacity: .8; }
     .toc ol { columns: 1; }
     .proj, .proj.flip, .me { grid-template-columns: 1fr; gap: 24px; }
-    .proj.flip .pics { order: 0; }
+    .proj.flip .pics { grid-column: auto; grid-row: auto; }
     .pics .mob { width: 34%; right: 0; }
+    .pics .hint { padding-right: calc(34% + 12px); }
+    .pics { margin-bottom: 48px; }
     .more, .frames { grid-column: 1; }
     .moreg { grid-template-columns: 1fr; }
     .frames { grid-template-columns: 1fr; }
@@ -186,7 +188,11 @@ $('#colophon').textContent = `Отпечатано на ризографе в д
 requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('boot')));
 
 /* цвет при наведении */
+// на телефоне наведения нет, поэтому цвет включается касанием
+const touch = matchMedia('(hover: none)').matches;
+if (touch) document.querySelectorAll('.pics .hint').forEach(h => h.textContent = 'Нажмите на картинку, чтобы увидеть её в цвете.');
 document.querySelectorAll('.riso').forEach(r => {
+  if (touch) return r.addEventListener('click', () => r.classList.toggle('live'));
   r.addEventListener('pointerenter', () => r.classList.add('live'));
   r.addEventListener('pointerleave', () => r.classList.remove('live'));
 });

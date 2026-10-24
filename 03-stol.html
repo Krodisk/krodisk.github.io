@@ -159,9 +159,9 @@ $('#ry').innerHTML = Array.from({ length: 12 }, (_, i) => `<span style="top:${i 
 
 /* раскладка: x и y в процентах ширины и пикселях, r поворот */
 const layout = [
-  ['card', 3, 60, -1.5], ['sheet0', 36, 70, 2.5], ['sheet1', 68, 40, -3], ['sticky0', 30, 470, -6],
-  ['sheet2', 4, 600, -2], ['note', 40, 560, 1.5], ['sheet3', 66, 520, 3.5], ['sticky1', 88, 470, 7],
-  ['sheet4', 8, 1080, 2], ['receipt', 42, 1060, -4], ['sheet5', 62, 1050, -2.5], ['sticky2', 30, 1440, 4],
+  ['card', 3, 60, -1.5], ['sheet0', 36, 70, 2.5], ['sheet1', 68, 40, -3], ['sticky0', 24, 440, -6],
+  ['sheet2', 4, 600, -2], ['note', 37, 560, 1.5], ['sheet3', 68, 520, 3.5], ['sticky1', 86, 470, 7],
+  ['sheet4', 8, 1080, 2], ['receipt', 42, 1150, -4], ['sheet5', 62, 1050, -2.5], ['sticky2', 30, 1440, 4],
   ['checklist', 5, 1520, -3], ['bcard', 52, 1560, 5], ['pencil', 66, 1830, -12]
 ];
 const tidyLayout = {
@@ -192,6 +192,11 @@ layout.forEach(([k, x, y, r]) => {
   el.style.left = x + '%'; el.style.top = y + 'px';
   el.style.transform = `rotate(${r}deg)`; el.dataset.r = r;
   el.style.zIndex = z++;
+});
+// на узком экране правые предметы не должны уезжать за край стола
+if (!matchMedia('(max-width: 900px)').matches) desk.querySelectorAll('.item').forEach(el => {
+  const over = el.offsetLeft + el.offsetWidth - (desk.clientWidth - 16);
+  if (over > 0) el.style.left = Math.max(0, el.offsetLeft - over) + 'px';
 });
 
 /* перетаскивание */

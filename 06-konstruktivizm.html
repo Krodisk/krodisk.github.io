@@ -47,7 +47,7 @@
 
   .poster { position: relative; padding: 14vh var(--side); border-top: 10px solid var(--black); display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: center; overflow: hidden; }
   .poster .n { position: absolute; right: var(--side); top: 3vh; font-size: 160px; line-height: 1; color: var(--red); opacity: .9; }
-  .poster h2 { font-size: clamp(54px, 9vw, 150px); line-height: .86; }
+  .poster h2 { font-size: clamp(54px, 9vw, 150px); line-height: .9; margin-bottom: 10px; }
   .poster .what { font-size: 22px; max-width: 30ch; }
   .poster .what b { font-family: var(--disp); font-weight: 500; text-transform: uppercase; display: block; font-size: 16px; color: var(--red); margin-bottom: 6px; }
   .rd { display: inline-flex; margin-top: 22px; font: 700 20px var(--disp); text-transform: uppercase; background: var(--black); color: var(--paper); padding: 10px 18px; }
@@ -63,9 +63,10 @@
   .v3 h2 { color: var(--black); }
   .v4 .duo { grid-column: 5 / 12; aspect-ratio: 4 / 3; transform: rotate(-6deg); box-shadow: 18px 18px 0 var(--black); }
   .v4 .txt { grid-column: 1 / 5; grid-row: 1; }
-  .v5 .duo { grid-column: 1 / 7; aspect-ratio: 1; border-radius: 50%; }
-  .v5 .duo + .duo { grid-column: 7 / 10; aspect-ratio: 9 / 19; border-radius: 0; align-self: end; }
-  .v5 .txt { grid-column: 10 / 13; }
+  .v5 .duo { grid-column: 1 / 6; aspect-ratio: 1; border-radius: 50%; }
+  .v5 .duo + .duo { grid-column: 6 / 9; aspect-ratio: 9 / 19; border-radius: 0; align-self: end; }
+  .v5 .txt { grid-column: 9 / 13; }
+  .v5 h2 { font-size: clamp(54px, 6vw, 100px); line-height: .98; margin-bottom: 10px; }
   .v6 .duo { grid-column: 1 / 13; aspect-ratio: 21 / 8; clip-path: polygon(0 20%, 100% 0, 100% 80%, 0 100%); }
   .v6 .txt { grid-column: 4 / 11; text-align: center; }
   .v6 .what { margin: 0 auto; }
