@@ -141,7 +141,7 @@ const NOTES = {
 };
 
 const tabsEl = $('#tabs'), pane = $('#pane'), side = $('#side');
-const tabs = [{ id: 'home', title: D.name + ', портфолио', color: '#1b1d22', url: `<b>krodisk.github.io</b>/portfolio` }]
+const tabs = [{ id: 'home', title: D.name + ', портфолио', color: '#1b1d22', url: `<b>krodisk.github.io</b>` }]
   .concat(P.map(p => ({ id: p.id, title: `${p.name}, ${p.client.toLowerCase()}`, color: p.accent, url: `<b>${p.id}.ru</b>, макет ${p.year} года` })));
 tabsEl.innerHTML = tabs.map((t, i) => `<button class="tab" role="tab" id="tab-${t.id}" aria-selected="${i === 0}" data-id="${t.id}"><i style="background:${t.color}"></i><span>${esc(t.title)}</span><b class="x" aria-hidden="true">×</b></button>`).join('') + `<span class="plus" aria-hidden="true">+</span>`;
 

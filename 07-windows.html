@@ -244,7 +244,7 @@ P.S. Этот рабочий стол тоже нарисовал я.</div>`);
   },
   price() {
     win('price', 'цены.xls', { w: 560, h: 260, icon: 'xls' }, el => {
-      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид', 'Данные']) + `<div class="body sunken"><table class="xl"><tr><th></th><th>A</th><th>B</th><th>C</th></tr><tr><td>1</td><td><b>Что</b></td><td><b>Цена</b></td><td><b>Срок</b></td></tr>${D.services.map((s, i) => `<tr><td>${i + 2}</td><td>${esc(s.name)}</td><td>${esc(s.price)}</td><td>${esc(s.time)}</td></tr>`).join('')}<tr><td>${D.services.length + 2}</td><td colspan="3"><i>Свободное окно: ${esc(D.window)}</i></td></tr></table></div><div class="status"><span>Готово</span></div>`);
+      el.insertAdjacentHTML('beforeend', menuBar(['Файл', 'Правка', 'Вид', 'Данные']) + `<div class="body sunken"><table class="xl"><tr><th></th><th>A</th><th>B</th><th>C</th></tr><tr><td>1</td><td><b>Что</b></td><td><b>Цена</b></td><td><b>Срок</b></td></tr>${D.services.map((s, i) => `<tr><td>${i + 2}</td><td>${esc(s.name)}</td><td>${esc(s.price)}</td><td>${esc(s.time)}</td></tr>`).join('')}</table></div><div class="status"><span>Готово</span></div>`);
     });
   },
   mail() {
